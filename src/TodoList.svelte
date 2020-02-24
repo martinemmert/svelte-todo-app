@@ -1,11 +1,18 @@
 <script>
-  export let todos;
+  import Todo from "./Todo.svelte";
+  export let todos = [];
+  export let filter;
+
+  $: filteredTodos = todos.filter(filter);
+
 </script>
 
-{#if todos && todos.length}
+{#if filteredTodos && filteredTodos.length}
   <ul>
-    {#each todos as todo (todo.id)}
-      <li>{todo.todo}</li>
+    {#each filteredTodos as todo (todo.id)}
+      <Todo {todo} on:check on:uncheck />
     {/each}
   </ul>
+{:else}
+  <p>... no items to show ...</p>
 {/if}
