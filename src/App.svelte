@@ -2,12 +2,6 @@
   import todos from "./todos.js";
   import TodoList from "./TodoList.svelte";
   import AddTodoForm from "./AddTodoForm.svelte";
-
-  todos.reset([
-    { id: "1", text: "create an app", done: true },
-    { id: "2", text: "deploy via github to zeit", done: true },
-    { id: "3", text: "reach world domination", done: false }
-  ]);
 </script>
 
 <main>

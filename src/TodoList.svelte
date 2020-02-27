@@ -1,9 +1,9 @@
 <script>
   import Todo from "./Todo.svelte";
-  export let todos = [];
+  export let todos = {};
   export let filter;
 
-  $: filteredTodos = todos.filter(filter);
+  $: filteredTodos = Object.values(todos).filter(filter);
 
 </script>
 
