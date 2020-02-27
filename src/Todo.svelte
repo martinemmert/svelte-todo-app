@@ -1,15 +1,8 @@
 <script>
   import { createEventDispatcher } from "svelte";
-  export let todo;
-  const dispatch = createEventDispatcher();
+  import todos from "./todos.js";
 
-  function handleChange() {
-    if (todo.done) {
-      dispatch("uncheck", todo.id);
-    } else {
-      dispatch("check", todo.id);
-    }
-  }
+  export let todo;
 </script>
 
 <style>
@@ -19,9 +12,11 @@
 </style>
 
 <li>
-  <label>
+  <span
+    on:click={() => todos.toggle(todo.id, !todo.done)}
+    class:done={todo.done}>
     {#if todo.done}◉{:else}○{/if}
-    <span class:done="{todo.done}">{todo.text}</span>
-    <input type="checkbox" checked={todo.done} on:change|preventDefault="{handleChange}" style="display: none;" />
-  </label>
+    {todo.text}
+  </span>
+  <span on:click={() => todos.remove(todo.id)}>🚫</span>
 </li>

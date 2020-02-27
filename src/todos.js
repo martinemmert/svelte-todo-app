@@ -1,34 +1,39 @@
 import { writable } from "svelte/store";
 
-let nextId = 0;
+const data = localStorage.getItem("todos");
+const initialData = data ? JSON.parse(data) : {};
+const todos = writable(initialData);
 
-const todos = writable([]);
+let nextId = data ? Object.keys(initialData).pop() : 0;
 
 function add(text) {
-  todos.update(current => [...current, { id: ++nextId, text, done: false }]);
+  todos.update(current => ({
+    ...current,
+    [++nextId]: { id: nextId, text, done: false }
+  }));
 }
 
-function reset(arr) {
-  todos.set(arr);
-  nextId = arr[arr.length - 1].id;
+function remove(id) {
+  todos.update(current => {
+    const { [id]: unused, ...rest } = current;
+    return rest;
+  });
 }
 
-function check(id) {
-  todos.update(current =>
-    current.map(item => (item.id === id ? { ...item, done: true } : item))
-  );
+function toggle(id, done) {
+  todos.update(current => {
+    if (current[id]) current[id].done = done;
+    return current;
+  });
 }
 
-function uncheck(id) {
-  todos.update(current =>
-    current.map(item => (item.id === id ? { ...item, done: false } : item))
-  );
-}
+todos.subscribe(val => {
+  localStorage.setItem("todos", JSON.stringify(val));
+});
 
 export default {
   subscribe: todos.subscribe,
   add,
-  reset,
-  check,
-  uncheck
+  remove,
+  toggle
 };
