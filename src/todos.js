@@ -9,7 +9,12 @@ let nextId = data ? Object.keys(initialData).pop() : 0;
 function add(text) {
   todos.update(current => ({
     ...current,
-    [++nextId]: { id: nextId, text, completed: false }
+    [++nextId]: {
+      id: nextId,
+      text,
+      createdOn: new Date().toISOString(),
+      completed: false
+    }
   }));
 }
 
