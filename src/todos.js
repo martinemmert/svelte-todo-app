@@ -20,9 +20,15 @@ function remove(id) {
   });
 }
 
-function toggle(id, done) {
+function toggle(id) {
   todos.update(current => {
-    if (current[id]) current[id].done = done;
+    if (current[id]) {
+      const updatedItem = {
+        ...current[id],
+        done: !current[id].done
+      };
+      return { ...current, [id]: updatedItem };
+    }
     return current;
   });
 }

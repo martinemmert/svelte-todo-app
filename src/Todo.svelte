@@ -13,7 +13,7 @@
 
 <li>
   <span
-    on:click={() => todos.toggle(todo.id, !todo.done)}
+    on:click={() => todos.toggle(todo.id)}
     class:done={todo.done}>
     {#if todo.done}◉{:else}○{/if}
     {todo.text}
