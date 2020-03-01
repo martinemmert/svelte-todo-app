@@ -1,5 +1,6 @@
 <script>
   import todos from "./todos.js";
+  import * as todoUtils from "./todo-utilities.js";
   import filterOptions from "./filterOptions.js";
   import TodoList from "./TodoList.svelte";
   import AddTodoForm from "./AddTodoForm.svelte";
@@ -17,15 +18,15 @@
         checked={$filterOptions.displayCompletedItems} />
     </label>
   </div>
-  <TodoList todos={$todos} filter={items => !items.completed} />
+  <TodoList
+    todos={$todos}
+    filter={items => !items.completed}
+    compareFunction={todoUtils.orderAscendingByCreationDate} />
   {#if $filterOptions.displayCompletedItems}
     <h3>Completed Items</h3>
     <TodoList
       todos={$todos}
       filter={items => items.completed}
-      compareFunction={(a, b) => {
-        if (a.completedOn === b.completedOn) return 0;
-        return a.completedOn < b.completedOn ? 1 : -1;
-      }} />
+      compareFunction={todoUtils.orderDescendingByCompletionDate} />
   {/if}
 </main>
