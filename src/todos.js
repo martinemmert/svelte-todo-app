@@ -25,7 +25,10 @@ function toggle(id) {
     if (current[id]) {
       const updatedItem = {
         ...current[id],
-        completed: !current[id].completed
+        completed: !current[id].completed,
+        completedOn: !current[id].completed
+          ? new Date().toISOString()
+          : undefined
       };
       return { ...current, [id]: updatedItem };
     }

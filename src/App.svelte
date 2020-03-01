@@ -20,6 +20,12 @@
   <TodoList todos={$todos} filter={items => !items.completed} />
   {#if $filterOptions.displayCompletedItems}
     <h3>Completed Items</h3>
-    <TodoList todos={$todos} filter={items => items.completed} />
+    <TodoList
+      todos={$todos}
+      filter={items => items.completed}
+      compareFunction={(a, b) => {
+        if (a.completedOn === b.completedOn) return 0;
+        return a.completedOn < b.completedOn ? 1 : -1;
+      }} />
   {/if}
 </main>
