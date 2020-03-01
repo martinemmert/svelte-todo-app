@@ -18,5 +18,8 @@
     {#if todo.done}◉{:else}○{/if}
     {todo.text}
   </span>
-  <span on:click={() => todos.remove(todo.id)}>🚫</span>
+  <span
+    on:click={() => confirm('Do you really want to delete this item?') && todos.remove(todo.id)}>
+    🚫
+  </span>
 </li>
