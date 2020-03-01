@@ -1,5 +1,6 @@
 <script>
   import todos from "./todos.js";
+  import filterOptions from "./filterOptions.js";
   import TodoList from "./TodoList.svelte";
   import AddTodoForm from "./AddTodoForm.svelte";
 </script>
@@ -7,8 +8,24 @@
 <main>
   <h1>My ToDo's</h1>
   <AddTodoForm />
-  <h2>open</h2>
-  <TodoList todos={$todos} filter={item => !item.done} />
-  <h2>completed</h2>
-  <TodoList todos={$todos} filter={item => item.done} />
+  <div>
+    <label>
+      <span>Show completed Items:</span>
+      <input
+        type="checkbox"
+        on:change={event => filterOptions.toggleCompletedItems()}
+        checked={$filterOptions.displayCompletedItems} />
+    </label>
+  </div>
+  <TodoList todos={$todos} filter={items => !items.completed} />
+  {#if $filterOptions.displayCompletedItems}
+    <h3>Completed Items</h3>
+    <TodoList
+      todos={$todos}
+      filter={items => items.completed}
+      compareFunction={(a, b) => {
+        if (a.completedOn === b.completedOn) return 0;
+        return a.completedOn < b.completedOn ? 1 : -1;
+      }} />
+  {/if}
 </main>

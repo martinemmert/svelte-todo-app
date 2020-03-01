@@ -9,7 +9,7 @@ let nextId = data ? Object.keys(initialData).pop() : 0;
 function add(text) {
   todos.update(current => ({
     ...current,
-    [++nextId]: { id: nextId, text, done: false }
+    [++nextId]: { id: nextId, text, completed: false }
   }));
 }
 
@@ -20,9 +20,18 @@ function remove(id) {
   });
 }
 
-function toggle(id, done) {
+function toggle(id) {
   todos.update(current => {
-    if (current[id]) current[id].done = done;
+    if (current[id]) {
+      const updatedItem = {
+        ...current[id],
+        completed: !current[id].completed,
+        completedOn: !current[id].completed
+          ? new Date().toISOString()
+          : undefined
+      };
+      return { ...current, [id]: updatedItem };
+    }
     return current;
   });
 }
