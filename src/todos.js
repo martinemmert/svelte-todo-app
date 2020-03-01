@@ -28,7 +28,11 @@ function toggle(id, done) {
 }
 
 todos.subscribe(val => {
-  localStorage.setItem("todos", JSON.stringify(val));
+  if (Object.keys(val).length < 1) {
+    localStorage.removeItem("todos");
+  } else {
+    localStorage.setItem("todos", JSON.stringify(val));
+  }
 });
 
 export default {
