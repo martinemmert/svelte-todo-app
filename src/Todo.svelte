@@ -14,8 +14,8 @@
 <li>
   <span
     on:click={() => todos.toggle(todo.id)}
-    class:done={todo.done}>
-    {#if todo.done}◉{:else}○{/if}
+    class:done={todo.completed}>
+    {#if todo.completed}◉{:else}○{/if}
     {todo.text}
   </span>
   <span

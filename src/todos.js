@@ -9,7 +9,7 @@ let nextId = data ? Object.keys(initialData).pop() : 0;
 function add(text) {
   todos.update(current => ({
     ...current,
-    [++nextId]: { id: nextId, text, done: false }
+    [++nextId]: { id: nextId, text, completed: false }
   }));
 }
 
@@ -25,7 +25,7 @@ function toggle(id) {
     if (current[id]) {
       const updatedItem = {
         ...current[id],
-        done: !current[id].done
+        completed: !current[id].completed
       };
       return { ...current, [id]: updatedItem };
     }

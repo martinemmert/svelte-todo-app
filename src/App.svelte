@@ -17,9 +17,9 @@
         checked={$filterOptions.displayCompletedItems} />
     </label>
   </div>
-  <TodoList todos={$todos} filter={items => !items.done} />
+  <TodoList todos={$todos} filter={items => !items.completed} />
   {#if $filterOptions.displayCompletedItems}
     <h3>Completed Items</h3>
-    <TodoList todos={$todos} filter={items => items.done} />
+    <TodoList todos={$todos} filter={items => items.completed} />
   {/if}
 </main>
