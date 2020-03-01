@@ -1,15 +1,27 @@
-import { writable } from "svelte/store";
+import { writable, derived } from "svelte/store";
+
+const DEFAULT_OPTIONS = {
+  displayCompletedItems: false,
+  sortOrder: "creationDate"
+};
 
 const data = localStorage.getItem("filterOptions");
-const initialData = data ? JSON.parse(data) : { displayCompletedItems: false };
-const filterOptions = writable(initialData);
+const initialData = data
+  ? { ...DEFAULT_OPTIONS, ...JSON.parse(data) }
+  : { ...DEFAULT_OPTIONS };
 
-function toggleCompletedItems() {
-  filterOptions.update(current => ({
-    ...current,
-    displayCompletedItems: !current.displayCompletedItems
-  }));
-}
+export const displayCompletedItems = writable(
+  initialData.displayCompletedItems
+);
+export const sortOrder = writable(initialData.sortOrder);
+
+const filterOptions = derived(
+  [displayCompletedItems, sortOrder],
+  ([$displayCompletedItems, $sortOrder]) => ({
+    displayCompletedItems: $displayCompletedItems,
+    sortOrder: $sortOrder
+  })
+);
 
 filterOptions.subscribe(val => {
   if (Object.keys(val).length < 1) {
@@ -18,9 +30,3 @@ filterOptions.subscribe(val => {
     localStorage.setItem("filterOptions", JSON.stringify(val));
   }
 });
-
-
-export default {
-  subscribe: filterOptions.subscribe,
-  toggleCompletedItems
-};
