@@ -41,6 +41,19 @@ function toggle(id) {
   });
 }
 
+function setDueDate(id, dueDate) {
+  todos.update(current => {
+    if (current[id]) {
+      const updatedItem = {
+        ...current[id],
+        dueDate
+      };
+      return { ...current, [id]: updatedItem };
+    }
+    return current;
+  });
+}
+
 todos.subscribe(val => {
   if (Object.keys(val).length < 1) {
     localStorage.removeItem("todos");
@@ -53,5 +66,6 @@ export default {
   subscribe: todos.subscribe,
   add,
   remove,
-  toggle
+  toggle,
+  setDueDate
 };
