@@ -1,6 +1,6 @@
 <script>
   import { createEventDispatcher } from "svelte";
-  import todos from "./todos.js";
+  import todos, { PRIORITY } from "./todos.js";
   export let todo;
 
   function getDateStringFromISODate(dateStr) {
@@ -8,6 +8,7 @@
   }
 
   let showDueDateForm = false;
+  let showPrioritySelection = false;
   const minDueDate = getDateStringFromISODate(new Date().toISOString());
 
   let dueDate = todo.dueDate
@@ -26,6 +27,11 @@
       dueDate ? new Date(dueDate).toISOString() : undefined
     );
     showDueDateForm = false;
+  }
+
+  function setPriority(id, priority) {
+    todos.setPriority(id, priority);
+    showPrioritySelection = false;
   }
 </script>
 
@@ -48,6 +54,36 @@
   </div>
   {#if !todo.completed}
     <div>
+      {#if showPrioritySelection}
+        <span on:click={() => setPriority(todo.id, PRIORITY.PRIMARY)}>
+          3️⃣
+        </span>
+        <span on:click={() => setPriority(todo.id, PRIORITY.SECONDARY)}>
+          2️⃣
+        </span>
+        <span on:click={() => setPriority(todo.id, PRIORITY.TERTIARY)}>
+          1️⃣
+        </span>
+        <span on:click={() => setPriority(todo.id, PRIORITY.NONE)}>
+          0️⃣
+        </span>
+      {:else if todo.priority === PRIORITY.PRIMARY}
+        <span on:click={() => (showPrioritySelection = !showPrioritySelection)}>
+          3️⃣
+        </span>
+      {:else if todo.priority === PRIORITY.SECONDARY}
+        <span on:click={() => (showPrioritySelection = !showPrioritySelection)}>
+          2️⃣
+        </span>
+      {:else if todo.priority === PRIORITY.TERTIARY}
+        <span on:click={() => (showPrioritySelection = !showPrioritySelection)}>
+          1️⃣
+        </span>
+      {:else}
+        <span on:click={() => (showPrioritySelection = !showPrioritySelection)}>
+          0️⃣
+        </span>
+      {/if}
       {#if showDueDateForm}
         <form on:submit|preventDefault={submitDueDateForm}>
           <input

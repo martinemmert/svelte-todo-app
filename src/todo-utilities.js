@@ -3,6 +3,11 @@ export function orderAscendingByCreationDate(a, b) {
   return a.createdOn > b.createdOn ? 1 : -1;
 }
 
+export function orderDescendingByPriority(a, b) {
+  if (a.priority === b.priority) return 0;
+  return a.priority < b.priority ? 1 : -1;
+}
+
 export function orderAscendingByDueDate(a, b) {
   if (!a.dueDate) return 1;
   if (!b.dueDate) return -1;

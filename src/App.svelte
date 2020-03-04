@@ -15,6 +15,9 @@
       case "dueDateDescending":
         orderFunction = todoUtils.orderDescendingByDueDate;
         break;
+      case "priorityDescending":
+        orderFunction = todoUtils.orderDescendingByPriority;
+        break;
       default:
         orderFunction = todoUtils.orderAscendingByCreationDate;
         break;
@@ -42,6 +45,10 @@
       <label>
         <input type="radio" bind:group={$sortOrder} value="dueDateDescending" />
         Due Date 🔽
+      </label>
+      <label>
+        <input type="radio" bind:group={$sortOrder} value="priorityDescending" />
+        Priority 🔽
       </label>
     </fieldset>
   </div>
