@@ -1,10 +1,10 @@
 import { writable } from "svelte/store";
 
 export const PRIORITY = {
-  PRIMARY: "primary",
-  SECONDARY: "secondary",
-  TERTIARY: "tertiary",
-  NONE: "none"
+  PRIMARY: 4,
+  SECONDARY: 3,
+  TERTIARY: 1,
+  NONE: 0
 };
 
 const data = localStorage.getItem("todos");
