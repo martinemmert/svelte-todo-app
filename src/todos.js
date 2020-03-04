@@ -1,5 +1,12 @@
 import { writable } from "svelte/store";
 
+export const PRIORITY = {
+  PRIMARY: "primary",
+  SECONDARY: "secondary",
+  TERTIARY: "tertiary",
+  NONE: "none"
+};
+
 const data = localStorage.getItem("todos");
 const initialData = data ? JSON.parse(data) : {};
 const todos = writable(initialData);
@@ -13,7 +20,8 @@ function add(text) {
       id: nextId,
       text,
       createdOn: new Date().toISOString(),
-      completed: false
+      completed: false,
+      priority: PRIORITY.NONE
     }
   }));
 }
@@ -44,10 +52,17 @@ function toggle(id) {
 function setDueDate(id, dueDate) {
   todos.update(current => {
     if (current[id]) {
-      const updatedItem = {
-        ...current[id],
-        dueDate
-      };
+      const updatedItem = { ...current[id], dueDate };
+      return { ...current, [id]: updatedItem };
+    }
+    return current;
+  });
+}
+
+function setPriority(id, priority) {
+  todos.update(current => {
+    if (current[id]) {
+      const updatedItem = { ...current[id], priority };
       return { ...current, [id]: updatedItem };
     }
     return current;
@@ -67,5 +82,6 @@ export default {
   add,
   remove,
   toggle,
-  setDueDate
+  setDueDate,
+  setPriority
 };
