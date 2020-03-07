@@ -47,7 +47,10 @@
         Due Date 🔽
       </label>
       <label>
-        <input type="radio" bind:group={$sortOrder} value="priorityDescending" />
+        <input
+          type="radio"
+          bind:group={$sortOrder}
+          value="priorityDescending" />
         Priority 🔽
       </label>
     </fieldset>

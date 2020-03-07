@@ -3,7 +3,7 @@ import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import livereload from 'rollup-plugin-livereload';
 import { terser } from 'rollup-plugin-terser';
-import postcss from "rollup-plugin-postcss"
+import postcss from "rollup-plugin-postcss";
 
 const production = !process.env.ROLLUP_WATCH;
 
@@ -24,7 +24,8 @@ export default {
 			css: css => {
 				css.write('public/build/bundle.css');
 			},
-			emitCss: true
+			// Emit CSS as "files" for other plugins to process
+			emitCss: true,
 		}),
 
 		// If you have external dependencies installed from
@@ -50,14 +51,9 @@ export default {
 		// instead of npm run dev), minify
 		production && terser(),
 
-		// add postcss support with tailwind css
+		// enable postcss
 		postcss({
-			extract: true,
-			plugins: [
-				require('postcss-import'),
-    		require('tailwindcss'),
-    		require('postcss-preset-env')({ stage: 1 }),
-			]
+			extract: true
 		})
 	],
 	watch: {
