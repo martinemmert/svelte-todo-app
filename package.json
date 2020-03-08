@@ -16,6 +16,7 @@
     "@rollup/plugin-commonjs": "^11.0.0",
     "@rollup/plugin-node-resolve": "^7.0.0",
     "@storybook/addon-actions": "^5.3.14",
+    "@storybook/addon-centered": "^5.3.14",
     "@storybook/addon-links": "^5.3.14",
     "@storybook/addons": "^5.3.14",
     "@storybook/svelte": "^5.3.14",
@@ -37,6 +38,7 @@
     "tailwindcss": "^1.2.0"
   },
   "dependencies": {
+    "classnames": "^2.2.6",
     "sirv-cli": "^0.4.4"
   }
 }
