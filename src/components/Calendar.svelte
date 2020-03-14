@@ -89,7 +89,11 @@
 <script>
   import { createEventDispatcher } from "svelte";
   import { writable } from "svelte/store";
-  import { ChevronsLeftIcon, ChevronsRightIcon } from "svelte-feather-icons";
+  import {
+    ChevronsLeftIcon,
+    ChevronsRightIcon,
+    XCircleIcon
+  } from "svelte-feather-icons";
   import CalendarDayCell from "./CalendarDayCell.svelte";
 
   const today = new Date();
@@ -142,8 +146,8 @@
   });
 </script>
 
-<time datetime={`${currentYear}`}>
-  <time datetime={`${currentYear}-${currentMonth + 1}`}>
+<time class="block" datetime={`${currentYear}`}>
+  <time class="block" datetime={`${currentYear}-${currentMonth + 1}`}>
     <header class="text-sm text-center">
       {i18n.datetime.month[currentMonth].long} {currentYear}
     </header>
@@ -204,4 +208,19 @@
       {/each}
     </section>
   </time>
+  <footer class="pt-3 mt-4 border-t border-gray-400">
+    <button
+      type="button"
+      class="flex items-center px-2 py-1 mx-auto text-gray-500 transition-colors duration-150 ease-out border rounded focus:outline-none hover:text-gray-800 hover:border-gray-800"
+      on:click={() => {
+        if ($value !== undefined) {
+          $value = undefined;
+        } else {
+          dispatch('change');
+        }
+      }}>
+      <XCircleIcon class="w-4 h-4 mr-2" />
+      <span class="text-sm">Clear</span>
+    </button>
+  </footer>
 </time>
