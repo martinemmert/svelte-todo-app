@@ -5,9 +5,7 @@
   export let compareFunction = undefined;
 
   $: filteredTodos = Object.values(todos).filter(filter);
-  $: orderedTodos = compareFunction
-    ? filteredTodos.sort(compareFunction)
-    : filteredTodos;
+  $: orderedTodos = compareFunction ? filteredTodos.sort(compareFunction) : filteredTodos;
 </script>
 
 {#if orderedTodos && orderedTodos.length}

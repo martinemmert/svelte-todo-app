@@ -4,7 +4,7 @@ export const PRIORITY = {
   PRIMARY: 4,
   SECONDARY: 3,
   TERTIARY: 1,
-  NONE: 0
+  NONE: 0,
 };
 
 const data = localStorage.getItem("todos");
@@ -21,8 +21,8 @@ function add(text) {
       text,
       createdOn: new Date().toISOString(),
       completed: false,
-      priority: PRIORITY.NONE
-    }
+      priority: PRIORITY.NONE,
+    },
   }));
 }
 
@@ -39,9 +39,7 @@ function toggle(id) {
       const updatedItem = {
         ...current[id],
         completed: !current[id].completed,
-        completedOn: !current[id].completed
-          ? new Date().toISOString()
-          : undefined
+        completedOn: !current[id].completed ? new Date().toISOString() : undefined,
       };
       return { ...current, [id]: updatedItem };
     }
@@ -83,5 +81,5 @@ export default {
   remove,
   toggle,
   setDueDate,
-  setPriority
+  setPriority,
 };

@@ -5,7 +5,7 @@ import Centered from "@storybook/addon-centered/svelte";
 export default {
   title: "App | Calendar",
   component: Calendar,
-  decorators: [Centered]
+  decorators: [Centered],
 };
 
 const minDate = "2020-02-10";
@@ -17,47 +17,47 @@ export const NoDateSelected = () => ({
   Component: Calendar,
   props: {},
   on: {
-    change: event => changeHandler(event.detail)
-  }
+    change: event => changeHandler(event.detail),
+  },
 });
 
 export const DateSelected = () => ({
   Component: Calendar,
   props: {
-    selectedDate: "2020-02-12"
+    selectedDate: "2020-02-12",
   },
   on: {
-    change: event => changeHandler(event.detail)
-  }
+    change: event => changeHandler(event.detail),
+  },
 });
 
 export const MinDateSet = () => ({
   Component: Calendar,
   props: {
-    minDate
+    minDate,
   },
   on: {
-    change: event => changeHandler(event.detail)
-  }
+    change: event => changeHandler(event.detail),
+  },
 });
 
 export const MaxDateSet = () => ({
   Component: Calendar,
   props: {
-    maxDate
+    maxDate,
   },
   on: {
-    change: event => changeHandler(event.detail)
-  }
+    change: event => changeHandler(event.detail),
+  },
 });
 
 export const MinMaxDateSet = () => ({
   Component: Calendar,
   props: {
     minDate,
-    maxDate
+    maxDate,
   },
   on: {
-    change: event => changeHandler(event.detail)
-  }
+    change: event => changeHandler(event.detail),
+  },
 });

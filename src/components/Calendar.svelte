@@ -50,7 +50,7 @@
       const cell = {
         date: daysOfPrevMonth - i + 1,
         month: prevMonth,
-        year: prevMonth == 12 ? year - 1 : year
+        year: prevMonth == 12 ? year - 1 : year,
       };
       cell.time = wd.setFullYear(cell.year, cell.month, cell.date);
       cell.value = `${cell.year}-${leftPad(cell.month)}-${leftPad(cell.date)}`;
@@ -70,7 +70,7 @@
       const cell = {
         date: (i % daysOfMonth) - firstDay + 1,
         month: nextMonth,
-        year: nextMonth == 1 ? year + 1 : year
+        year: nextMonth == 1 ? year + 1 : year,
       };
       cell.time = wd.setFullYear(cell.year, cell.month, cell.date);
       cell.value = `${cell.year}-${leftPad(cell.month)}-${leftPad(cell.date)}`;
@@ -101,7 +101,7 @@
     return (
       typeof str === "string" &&
       !!str.match(
-        /^[1-2][0-9]{3}-(?:0(?=[1-9])[1-9]|1(?=[0-2])[0-2])-(?:0(?=[1-9])[1-9]|[1-2](?=[0-9])[0-9]|3(?=[0-1])[0-1])$/
+        /^[1-2][0-9]{3}-(?:0(?=[1-9])[1-9]|1(?=[0-2])[0-2])-(?:0(?=[1-9])[1-9]|[1-2](?=[0-9])[0-9]|3(?=[0-1])[0-1])$/,
       )
     );
   }
@@ -114,11 +114,7 @@
 <script>
   import { createEventDispatcher } from "svelte";
   import { writable } from "svelte/store";
-  import {
-    ChevronsLeftIcon,
-    ChevronsRightIcon,
-    XCircleIcon
-  } from "svelte-feather-icons";
+  import { ChevronsLeftIcon, ChevronsRightIcon, XCircleIcon } from "svelte-feather-icons";
   import CalendarDayCell from "./CalendarDayCell.svelte";
 
   const today = new Date();
@@ -127,17 +123,12 @@
   export let maxDate;
   export let selectedDate;
 
-  if (minDate)
-    invariant(isDateString(minDate), getDateStringErrorMessage("minDate"));
+  if (minDate) invariant(isDateString(minDate), getDateStringErrorMessage("minDate"));
 
-  if (maxDate)
-    invariant(isDateString(maxDate), getDateStringErrorMessage("maxDate"));
+  if (maxDate) invariant(isDateString(maxDate), getDateStringErrorMessage("maxDate"));
 
   if (selectedDate)
-    invariant(
-      isDateString(selectedDate),
-      getDateStringErrorMessage("selectedDate")
-    );
+    invariant(isDateString(selectedDate), getDateStringErrorMessage("selectedDate"));
 
   let [currentYear, currentMonth] = selectedDate
     ? selectedDate.split("-")
@@ -146,9 +137,7 @@
   const [minDateYear, minDateMonth, minDateDate] = splitDateString(minDate);
   const [maxDateYear, maxDateMonth, maxDateDate] = splitDateString(maxDate);
 
-  const minDateTime = minDate
-    ? wd.setFullYear(minDateYear, minDateMonth, minDateDate)
-    : 0;
+  const minDateTime = minDate ? wd.setFullYear(minDateYear, minDateMonth, minDateDate) : 0;
 
   const maxDateTime = maxDate
     ? wd.setFullYear(maxDateYear, maxDateMonth, maxDateDate)
@@ -188,64 +177,54 @@
   $: cells = getCalendarSheet(currentMonth, currentYear);
 </script>
 
-<time class="block" datetime={`${currentYear}`}>
-  <time class="block" datetime={`${currentYear}-${currentMonth + 1}`}>
+<time class="block" datetime="{`${currentYear}`}">
+  <time class="block" datetime="{`${currentYear}-${currentMonth + 1}`}">
     <header class="text-sm text-center">
       {i18n.datetime.month[currentMonth - 1].long} {currentYear}
     </header>
     <nav class="flex items-center justify-between my-2 text-sm">
       <button
-        on:click={gotoPrevMonth}
+        on:click="{gotoPrevMonth}"
         class="block p-1 bg-gray-300 rounded disabled:bg-gray-200 disabled:text-gray-400"
-        disabled={minDate && currentMonth <= minDateMonth && currentYear <= minDateYear}>
+        disabled="{minDate && currentMonth <= minDateMonth && currentYear <= minDateYear}"
+      >
         <ChevronsLeftIcon class="w-4 h-4" />
       </button>
-      <button on:click={gotoCurrentMonth}>Today</button>
+      <button on:click="{gotoCurrentMonth}">Today</button>
       <button
-        on:click={gotoNextMonth}
+        on:click="{gotoNextMonth}"
         class="block p-1 bg-gray-300 rounded disabled:bg-gray-200 disabled:text-gray-400"
-        disabled={maxDate && currentMonth >= maxDateMonth && currentYear >= maxDateYear}>
+        disabled="{maxDate && currentMonth >= maxDateMonth && currentYear >= maxDateYear}"
+      >
         <ChevronsRightIcon class="w-4 h-4" />
       </button>
     </nav>
     <section class="grid grid-cols-7 gap-2">
-      <span class="text-sm font-semibold text-center">
-        {i18n.datetime.weekday[0].short}
-      </span>
-      <span class="text-sm font-semibold text-center">
-        {i18n.datetime.weekday[1].short}
-      </span>
-      <span class="text-sm font-semibold text-center">
-        {i18n.datetime.weekday[2].short}
-      </span>
-      <span class="text-sm font-semibold text-center">
-        {i18n.datetime.weekday[3].short}
-      </span>
-      <span class="text-sm font-semibold text-center">
-        {i18n.datetime.weekday[4].short}
-      </span>
-      <span class="text-sm font-semibold text-center">
-        {i18n.datetime.weekday[5].short}
-      </span>
-      <span class="text-sm font-semibold text-center">
-        {i18n.datetime.weekday[6].short}
-      </span>
+      <span class="text-sm font-semibold text-center">{i18n.datetime.weekday[0].short}</span>
+      <span class="text-sm font-semibold text-center">{i18n.datetime.weekday[1].short}</span>
+      <span class="text-sm font-semibold text-center">{i18n.datetime.weekday[2].short}</span>
+      <span class="text-sm font-semibold text-center">{i18n.datetime.weekday[3].short}</span>
+      <span class="text-sm font-semibold text-center">{i18n.datetime.weekday[4].short}</span>
+      <span class="text-sm font-semibold text-center">{i18n.datetime.weekday[5].short}</span>
+      <span class="text-sm font-semibold text-center">{i18n.datetime.weekday[6].short}</span>
       {#each cells as cell (cell)}
         <CalendarDayCell
           class="relative overflow-hidden focus-within:text-red-500"
-          value={cell.date}
-          disabled={!dateWithinDateRange(cell.time, minDateTime, maxDateTime)}
-          selected={$value === cell.value}
-          today={today.getTime() === cell.time}
-          currentMonth={cell.month === currentMonth}
-          title={cell.value}>
+          value="{cell.date}"
+          disabled="{!dateWithinDateRange(cell.time, minDateTime, maxDateTime)}"
+          selected="{$value === cell.value}"
+          today="{today.getTime() === cell.time}"
+          currentMonth="{cell.month === currentMonth}"
+          title="{cell.value}"
+        >
           <input
             type="radio"
-            title={cell.value}
-            bind:group={$value}
+            title="{cell.value}"
+            bind:group="{$value}"
             class="hidden"
-            disabled={!dateWithinDateRange(cell.time, minDateTime, maxDateTime)}
-            value={cell.value} />
+            disabled="{!dateWithinDateRange(cell.time, minDateTime, maxDateTime)}"
+            value="{cell.value}"
+          />
         </CalendarDayCell>
       {/each}
     </section>
@@ -253,14 +232,16 @@
   <footer class="pt-3 mt-4 border-t border-gray-400">
     <button
       type="button"
-      class="flex items-center px-2 py-1 mx-auto text-gray-500 transition-colors duration-150 ease-out border rounded focus:outline-none hover:text-gray-800 hover:border-gray-800"
-      on:click={() => {
+      class="flex items-center px-2 py-1 mx-auto text-gray-500 transition-colors duration-150
+      ease-out border rounded focus:outline-none hover:text-gray-800 hover:border-gray-800"
+      on:click="{() => {
         if ($value !== undefined) {
           $value = undefined;
         } else {
           dispatch('change');
         }
-      }}>
+      }}"
+    >
       <XCircleIcon class="w-4 h-4 mr-2" />
       <span class="text-sm">Clear</span>
     </button>

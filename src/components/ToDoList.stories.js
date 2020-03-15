@@ -4,14 +4,14 @@ import Centered from "@storybook/addon-centered/svelte";
 export default {
   title: "App | ToDoList",
   component: ToDoList,
-  decorators: [Centered]
+  decorators: [Centered],
 };
 
 const minimalItem = {
   id: 1,
   text: "Todo Item without any further details",
   createdOn: "2020-03-01",
-  completed: false
+  completed: false,
 };
 
 const todo = minimalItem;
@@ -23,6 +23,6 @@ const todo4 = { ...minimalItem, priority: true, dueDate: "2020-03-01" };
 export const Default = () => ({
   Component: ToDoList,
   props: {
-    items: [todo, todo1, todo2, todo3, todo4]
-  }
+    items: [todo, todo1, todo2, todo3, todo4],
+  },
 });

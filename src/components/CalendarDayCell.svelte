@@ -8,33 +8,27 @@
   const cnBorder = "border rounded-md";
   const cnMousePointer = "cursor-pointer select-none";
 
-  const cnIdle = classnames(
-    cnFlex,
-    cnDimensions,
-    cnTransition,
-    cnBorder,
-    cnMousePointer
-  );
+  const cnIdle = classnames(cnFlex, cnDimensions, cnTransition, cnBorder, cnMousePointer);
 
   const cnDefault = classnames(
     cnIdle,
     "text-gray-700 hover:text-blue-600",
     "hover:border-blue-600",
-    "hover:bg-blue-100"
+    "hover:bg-blue-100",
   );
 
   const cnSelected = classnames(
     cnIdle,
     "text-white",
     "border-blue-600 hover:border-blue-500",
-    "bg-blue-600 hover:bg-blue-500"
+    "bg-blue-600 hover:bg-blue-500",
   );
 
   const cnToday = classnames(
     cnIdle,
     "text-teal-500 hover:text-blue-600",
     "border-teal-400 hover:border-blue-600",
-    "hover:bg-blue-100"
+    "hover:bg-blue-100",
   );
 
   const cnFaded = classnames(
@@ -43,7 +37,7 @@
     "hover:border-blue-600",
     "hover:bg-blue-100",
     "bg-gray-100",
-    "border-gray-100"
+    "border-gray-100",
   );
 
   const cnFadedAndToday = classnames(
@@ -51,7 +45,7 @@
     "text-teal-400 hover:text-blue-600",
     "border-teal-100 hover:border-blue-600",
     "hover:bg-blue-100",
-    "bg-teal-100"
+    "bg-teal-100",
   );
 
   const cnFadedAndSelected = classnames(
@@ -59,14 +53,14 @@
     "text-blue-400 hover:text-white",
     "border-blue-100 hover:border-blue-500",
     "hover:bg-blue-500",
-    "bg-blue-100"
+    "bg-blue-100",
   );
 
   const cnDisabled = classnames(
     cnIdle,
     "text-gray-400",
     "cursor-not-allowed",
-    "border-transparent"
+    "border-transparent",
   );
 </script>
 
@@ -94,13 +88,10 @@
     }
   }
 
-  $: cn = classnames(
-    getClassNames({ today, selected, disabled, currentMonth }),
-    className
-  );
+  $: cn = classnames(getClassNames({ today, selected, disabled, currentMonth }), className);
 </script>
 
-<label class={cn} {title}>
+<label class="{cn}" {title}>
   <slot />
   <time>{value}</time>
 </label>

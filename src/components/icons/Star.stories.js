@@ -4,23 +4,23 @@ import Star from "./Star.svelte";
 export default {
   title: "Global | Icons / Star",
   component: Star,
-  decorators: [Centered]
+  decorators: [Centered],
 };
 
 export const Default = () => ({
-  Component: Star
+  Component: Star,
 });
 
 export const Half = () => ({
   Component: Star,
   props: {
-    half: true
-  }
+    half: true,
+  },
 });
 
 export const Outline = () => ({
   Component: Star,
   props: {
-    outline: true
-  }
+    outline: true,
+  },
 });

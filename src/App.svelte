@@ -31,39 +31,38 @@
   <div>
     <label>
       <span>Show completed Items:</span>
-      <input type="checkbox" bind:checked={$displayCompletedItems} />
+      <input type="checkbox" bind:checked="{$displayCompletedItems}" />
     </label>
     <fieldset>
       <label>
-        <input type="radio" bind:group={$sortOrder} value="creationDate" />
+        <input type="radio" bind:group="{$sortOrder}" value="creationDate" />
         Creation Date 🔼
       </label>
       <label>
-        <input type="radio" bind:group={$sortOrder} value="dueDateAscending" />
+        <input type="radio" bind:group="{$sortOrder}" value="dueDateAscending" />
         Due Date 🔼
       </label>
       <label>
-        <input type="radio" bind:group={$sortOrder} value="dueDateDescending" />
+        <input type="radio" bind:group="{$sortOrder}" value="dueDateDescending" />
         Due Date 🔽
       </label>
       <label>
-        <input
-          type="radio"
-          bind:group={$sortOrder}
-          value="priorityDescending" />
+        <input type="radio" bind:group="{$sortOrder}" value="priorityDescending" />
         Priority 🔽
       </label>
     </fieldset>
   </div>
   <TodoList
-    todos={$todos}
-    filter={items => !items.completed}
-    compareFunction={orderFunction} />
+    todos="{$todos}"
+    filter="{items => !items.completed}"
+    compareFunction="{orderFunction}"
+  />
   {#if $displayCompletedItems}
     <h3>Completed Items</h3>
     <TodoList
-      todos={$todos}
-      filter={items => items.completed}
-      compareFunction={todoUtils.orderDescendingByCompletionDate} />
+      todos="{$todos}"
+      filter="{items => items.completed}"
+      compareFunction="{todoUtils.orderDescendingByCompletionDate}"
+    />
   {/if}
 </main>

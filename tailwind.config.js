@@ -1,16 +1,14 @@
-const { colors } = require("tailwindcss/defaultTheme");
-
 module.exports = {
   plugins: [require("@tailwindcss/custom-forms")],
   theme: {
     extend: {
       spacing: {
-        "0.5": "0.125rem"
+        "0.5": "0.125rem",
       },
       inset: {
-        "1/2": "50%"
-      }
-    }
+        "1/2": "50%",
+      },
+    },
   },
   variants: {
     backgroundColor: [
@@ -21,7 +19,7 @@ module.exports = {
       "hover",
       "active",
       "visited",
-      "disabled"
+      "disabled",
     ],
     border: [
       "responsive",
@@ -31,7 +29,7 @@ module.exports = {
       "hover",
       "active",
       "visited",
-      "disabled"
+      "disabled",
     ],
     scale: ["responsive", "hover", "focus", "active", "group-hover"],
     textColor: [
@@ -42,7 +40,7 @@ module.exports = {
       "hover",
       "active",
       "visited",
-      "disabled"
-    ]
-  }
+      "disabled",
+    ],
+  },
 };

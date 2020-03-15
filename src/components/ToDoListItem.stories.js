@@ -5,14 +5,14 @@ import Centered from "@storybook/addon-centered/svelte";
 export default {
   title: "App | ToDo Item",
   component: ToDoListItem,
-  decorators: [Centered]
+  decorators: [Centered],
 };
 
 const minimalItem = {
   id: 1,
   text: "Todo Item without any further details",
   createdOn: "2020-03-01",
-  completed: false
+  completed: false,
 };
 
 const todo = minimalItem;
@@ -25,39 +25,36 @@ const handler = {
   delete: action("on:delete"),
   toggle: action("on:toggle"),
   changeDueDate: action("on:changeDueDate"),
-  changePriority: action("on:changePriority")
+  changePriority: action("on:changePriority"),
 };
 
 export const Default = () => ({
   Component: ToDoListItem,
   title: "default",
   props: { ...todo },
-  on: { ...handler }
+  on: { ...handler },
 });
 
 export const PrioritySet = () => ({
   Component: ToDoListItem,
   props: { ...todo3 },
-  on: { ...handler }
+  on: { ...handler },
 });
 
 export const DueDateSet = () => ({
   Component: ToDoListItem,
   props: { ...todo1 },
-  on: { ...handler }
+  on: { ...handler },
 });
 
 export const PriorityAndDueDateSet = () => ({
   Component: ToDoListItem,
   props: { ...todo4 },
-  on: { ...handler }
+  on: { ...handler },
 });
 
 export const Checked = () => ({
   Component: ToDoListItem,
   props: { ...todo2 },
-  on: { ...handler }
+  on: { ...handler },
 });
-
-
-

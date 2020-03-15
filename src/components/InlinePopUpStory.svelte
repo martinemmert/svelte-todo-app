@@ -4,12 +4,10 @@
 </script>
 
 <label class="fixed">
-  <input type="checkbox" bind:checked={open} />
+  <input type="checkbox" bind:checked="{open}" />
   open
 </label>
 
 {#if open}
-  <InlinePopUp bind:open on:clickoutside={() => (open = false)}>
-    child goes here
-  </InlinePopUp>
+  <InlinePopUp bind:open on:clickoutside="{() => (open = false)}">child goes here</InlinePopUp>
 {/if}

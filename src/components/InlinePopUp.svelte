@@ -21,7 +21,7 @@
           filter: blur(${2 - blur * 2}px);
           opacity: ${blur};
           `;
-      }
+      },
     };
   }
 
@@ -43,11 +43,13 @@
   };
 </script>
 
-<svelte:body on:click={clickOutSideHandler} />
+<svelte:body on:click="{clickOutSideHandler}" />
 <div
-  bind:this={child}
-  class="fixed z-10 p-4 transform -translate-x-1/2 -translate-y-1/2 bg-white border border-gray-100 rounded-md shadow-lg top-1/2 left-1/2"
-  in:popUp={{ duration: 150 }}
-  out:popUp={{ duration: 150, out: true }}>
+  bind:this="{child}"
+  class="fixed z-10 p-4 transform -translate-x-1/2 -translate-y-1/2 bg-white border border-gray-100
+  rounded-md shadow-lg top-1/2 left-1/2"
+  in:popUp="{{ duration: 150 }}"
+  out:popUp="{{ duration: 150, out: true }}"
+>
   <slot />
 </div>
