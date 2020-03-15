@@ -1,0 +1,6 @@
+{
+  "printWidth": 100,
+  "trailingComma": "all",
+  "svelteStrictMode": true,
+  "svelteBracketNewLine": true
+}
