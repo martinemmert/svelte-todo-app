@@ -1,4 +1,5 @@
 <script context="module">
+  import invariant from "invariant";
   import i18n from "../i18n";
   const wd = new Date();
   wd.setHours(0, 0, 0, 0);
@@ -8,14 +9,18 @@
     return (year % 4 == 0 && year % 100 != 0) || year % 400 == 0;
   }
 
+  export function leftPad(value) {
+    return value < 10 ? `0${value}` : value;
+  }
+
   export function getDaysOfMonth(month, year = THIS_YEAR) {
     switch (month) {
-      case 3: // april
-      case 5: // june
-      case 8: // september
-      case 10: // november
+      case 4: // april
+      case 6: // june
+      case 9: // september
+      case 11: // november
         return 30;
-      case 1: // february
+      case 2: // february
         return isLeapYear(year) ? 29 : 28;
       default:
         // january, march, may, july, august, october, december
@@ -24,13 +29,13 @@
   }
 
   export function getFirstDayOfMonth(month, year = THIS_YEAR) {
-    wd.setFullYear(year, month, 1);
+    wd.setFullYear(year, month - 1, 1);
     return wd.getDay() - 1 < 0 ? 6 : wd.getDay() - 1;
   }
 
   export function getCalendarSheet(month, year = THIS_YEAR) {
-    const prevMonth = month == 0 ? 11 : month - 1;
-    const nextMonth = month == 11 ? 0 : month + 1;
+    const prevMonth = month == 0 ? 12 : month - 1;
+    const nextMonth = month == 12 ? 0 : month + 1;
     const daysOfMonth = getDaysOfMonth(month, year);
     const daysOfPrevMonth = getDaysOfMonth(prevMonth, year);
     const firstDay = getFirstDayOfMonth(month, year);
@@ -41,18 +46,18 @@
       const cell = {
         date: daysOfPrevMonth - i + 1,
         month: prevMonth,
-        year: prevMonth == 11 ? year - 1 : year
+        year: prevMonth == 12 ? year - 1 : year
       };
-      cell.dateObj = new Date(cell.year, cell.month, cell.date, 0, 0, 0, 0);
-      cell.time = cell.dateObj.getTime();
+      cell.time = wd.setFullYear(cell.year, cell.month, cell.date);
+      cell.value = `${cell.year}-${leftPad(cell.month)}-${leftPad(cell.date)}`;
       cells.push(cell);
     }
 
     // current month
     for (let i = 0; i < daysOfMonth; i++) {
       const cell = { date: i + 1, month, year };
-      cell.dateObj = new Date(cell.year, cell.month, cell.date, 0, 0, 0, 0);
-      cell.time = cell.dateObj.getTime();
+      cell.time = wd.setFullYear(cell.year, cell.month, cell.date);
+      cell.value = `${cell.year}-${leftPad(cell.month)}-${leftPad(cell.date)}`;
       cells.push(cell);
     }
 
@@ -61,10 +66,10 @@
       const cell = {
         date: (i % daysOfMonth) - firstDay + 1,
         month: nextMonth,
-        year: nextMonth == 0 ? year + 1 : year
+        year: nextMonth == 1 ? year + 1 : year
       };
-      cell.dateObj = new Date(cell.year, cell.month, cell.date, 0, 0, 0, 0);
-      cell.time = cell.dateObj.getTime();
+      cell.time = wd.setFullYear(cell.year, cell.month, cell.date);
+      cell.value = `${cell.year}-${leftPad(cell.month)}-${leftPad(cell.date)}`;
       cells.push(cell);
     }
 
@@ -77,12 +82,28 @@
     return true;
   }
 
-  export function parseDateToDateValueString(dateObj) {
+  export function parseDateToDateString(dateObj) {
     let month = dateObj.getMonth() + 1;
-    month = month < 10 ? "0" + month : month;
     let date = dateObj.getDate();
-    date = date < 10 ? "0" + date : date;
-    return `${dateObj.getFullYear()}-${month}-${date}`;
+    return `${dateObj.getFullYear()}-${leftPad(month)}-${leftPad(date)}`;
+  }
+
+  export function parseDateStringToDate(dateStr) {
+    invariant(isDateString(dateStr), getErrorMessage("dateStr"));
+    return new Date(...dateStr.split("-"));
+  }
+
+  export function isDateString(str) {
+    return (
+      typeof str === "string" &&
+      !!str.match(
+        /^[1-2][0-9]{3}-(?:0(?=[1-9])[1-9]|1(?=[0-2])[0-2])-(?:0(?=[1-9])[1-9]|[1-2](?=[0-9])[0-9]|3(?=[0-1])[0-1])$/
+      )
+    );
+  }
+
+  function getDateStringErrorMessage(valName) {
+    return `The value of '${valName}'' is not a string or does not match the format YYYY-MM-DD.`;
   }
 </script>
 
@@ -97,72 +118,96 @@
   import CalendarDayCell from "./CalendarDayCell.svelte";
 
   const today = new Date();
-  today.setHours(0, 0, 0, 0);
 
   export let minDate;
   export let maxDate;
   export let selectedDate;
 
-  if (selectedDate) selectedDate.setHours(0, 0, 0, 0);
+  if (minDate)
+    invariant(isDateString(minDate), getDateStringErrorMessage("minDate"));
 
-  let currentYear = (selectedDate || today).getFullYear();
-  let currentMonth = (selectedDate || today).getMonth();
-  let cells = getCalendarSheet(currentMonth, currentYear);
+  if (maxDate)
+    invariant(isDateString(maxDate), getDateStringErrorMessage("maxDate"));
 
-  const value = writable(
-    selectedDate ? parseDateToDateValueString(selectedDate) : undefined
-  );
+  if (selectedDate)
+    invariant(
+      isDateString(selectedDate),
+      getDateStringErrorMessage("selectedDate")
+    );
 
+  let [currentYear, currentMonth] = selectedDate
+    ? selectedDate.split("-")
+    : [today.getFullYear(), today.getMonth() + 1];
+
+  const [minDateYear, minDateMonth, minDateDate] = (minDate
+    ? minDate
+    : ""
+  ).split("-");
+
+  const [maxDateYear, maxDateMonth, maxDateDate] = (maxDate
+    ? maxDate
+    : ""
+  ).split("-");
+
+  const minDateTime = minDate
+    ? wd.setFullYear(minDateYear, minDateMonth, minDateDate)
+    : 0;
+
+  const maxDateTime = maxDate
+    ? wd.setFullYear(maxDateYear, maxDateMonth, maxDateDate)
+    : Number.MAX_SAFE_INTEGER;
+
+  const value = writable(selectedDate);
   const dispatch = createEventDispatcher();
 
   function gotoPrevMonth() {
-    currentMonth = currentMonth == 0 ? 11 : currentMonth - 1;
-    currentYear = currentMonth == 11 ? currentYear - 1 : currentYear;
-    cells = getCalendarSheet(currentMonth, currentYear);
+    currentMonth = currentMonth == 1 ? 12 : currentMonth - 1;
+    currentYear = currentMonth == 12 ? currentYear - 1 : currentYear;
   }
 
   function gotoCurrentMonth() {
-    currentMonth = today.getMonth();
+    currentMonth = today.getMonth() + 1;
     currentYear = today.getFullYear();
-    cells = getCalendarSheet(currentMonth, currentYear);
   }
 
   function gotoNextMonth() {
-    currentMonth = currentMonth == 11 ? 0 : currentMonth + 1;
-    currentYear = currentMonth == 0 ? currentYear + 1 : currentYear;
-    cells = getCalendarSheet(currentMonth, currentYear);
+    currentMonth = currentMonth == 12 ? 0 : currentMonth + 1;
+    currentYear = currentMonth == 1 ? currentYear + 1 : currentYear;
   }
 
   value.subscribe(value => {
     if (value) {
-      const [year, month] = value.split("-");
-      if (currentMonth !== month - 1 || currentYear !== year) {
-        currentMonth = month - 1;
+      let [year, month] = value.split("-");
+      year = parseFloat(year);
+      month = parseFloat(month);
+      if (currentMonth !== month || currentYear !== year) {
+        currentMonth = month;
         currentYear = year;
-        cells = getCalendarSheet(currentMonth, currentYear);
       }
     }
     dispatch("change", value);
   });
+
+  $: cells = getCalendarSheet(currentMonth, currentYear);
 </script>
 
 <time class="block" datetime={`${currentYear}`}>
   <time class="block" datetime={`${currentYear}-${currentMonth + 1}`}>
     <header class="text-sm text-center">
-      {i18n.datetime.month[currentMonth].long} {currentYear}
+      {i18n.datetime.month[currentMonth - 1].long} {currentYear}
     </header>
     <nav class="flex items-center justify-between my-2 text-sm">
       <button
         on:click={gotoPrevMonth}
         class="block p-1 bg-gray-300 rounded disabled:bg-gray-200 disabled:text-gray-400"
-        disabled={minDate && (currentMonth <= minDate.getMonth() && currentYear <= minDate.getFullYear())}>
+        disabled={minDate && currentMonth <= minDateMonth && currentYear <= minDateYear}>
         <ChevronsLeftIcon class="w-4 h-4" />
       </button>
       <button on:click={gotoCurrentMonth}>Today</button>
       <button
         on:click={gotoNextMonth}
         class="block p-1 bg-gray-300 rounded disabled:bg-gray-200 disabled:text-gray-400"
-        disabled={maxDate && currentMonth >= maxDate.getMonth() && currentYear >= maxDate.getFullYear()}>
+        disabled={maxDate && currentMonth >= maxDateMonth && currentYear >= maxDateYear}>
         <ChevronsRightIcon class="w-4 h-4" />
       </button>
     </nav>
@@ -191,19 +236,19 @@
       {#each cells as cell (cell)}
         <CalendarDayCell
           class="relative overflow-hidden focus-within:text-red-500"
-          date={cell.dateObj}
-          disabled={!dateWithinDateRange(cell.dateObj, minDate, maxDate)}
-          selected={$value === parseDateToDateValueString(cell.dateObj)}
+          value={cell.date}
+          disabled={!dateWithinDateRange(cell.time, minDateTime, maxDateTime)}
+          selected={$value === cell.value}
           today={today.getTime() === cell.time}
           currentMonth={cell.month === currentMonth}
-          title={i18n.formatter.date.short.format(cell.dateObj)}>
+          title={cell.value}>
           <input
             type="radio"
-            title={i18n.formatter.date.short.format(cell.dateObj)}
+            title={cell.value}
             bind:group={$value}
             class="hidden"
-            disabled={!dateWithinDateRange(cell.dateObj, minDate, maxDate)}
-            value={parseDateToDateValueString(cell.dateObj)} />
+            disabled={!dateWithinDateRange(cell.time, minDateTime, maxDateTime)}
+            value={cell.value} />
         </CalendarDayCell>
       {/each}
     </section>

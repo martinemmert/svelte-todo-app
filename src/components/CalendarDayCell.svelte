@@ -71,7 +71,7 @@
 </script>
 
 <script>
-  export let date = new Date();
+  export let value;
   export let today = false;
   export let selected = false;
   export let disabled = false;
@@ -102,5 +102,5 @@
 
 <label class={cn} {title}>
   <slot />
-  <time>{date.getDate()}</time>
+  <time>{value}</time>
 </label>

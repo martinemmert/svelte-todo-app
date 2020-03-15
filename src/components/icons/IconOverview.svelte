@@ -1,5 +1,5 @@
 <script>
-  import * as Icons from "svelte-feather-icons";
+  import * as Icons from "./index";
 </script>
 
 <div class="grid grid-cols-6">

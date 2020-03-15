@@ -8,9 +8,8 @@ export default {
   decorators: [Centered]
 };
 
-const minDate = new Date();
-minDate.setHours(0, 0, 0, 0);
-const maxDate = new Date(2020, 2, 10, 0, 0, 0, 0);
+const minDate = "2020-02-10";
+const maxDate = "2020-02-20";
 
 const changeHandler = action("on:change");
 
@@ -25,7 +24,7 @@ export const NoDateSelected = () => ({
 export const DateSelected = () => ({
   Component: Calendar,
   props: {
-    selectedDate: new Date(2020, 2, 8)
+    selectedDate: "2020-02-12"
   },
   on: {
     change: event => changeHandler(event.detail)

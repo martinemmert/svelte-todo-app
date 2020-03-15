@@ -2,7 +2,7 @@ import DateSelector from "./DateSelector.svelte";
 import Centered from "@storybook/addon-centered/svelte";
 
 export default {
-  title: "App | DateSelector",
+  title: "App | Todo Item / Date Selector",
   component: DateSelector,
   decorators: [Centered]
 };
@@ -15,6 +15,6 @@ export const NoValueSet = () => ({
 export const Value = () => ({
   Component: DateSelector,
   props: {
-    value: new Date()
+    value: '2020-03-14'
   }
 });

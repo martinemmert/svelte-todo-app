@@ -1,10 +1,10 @@
-import IconOverview from './IconOverview.svelte';
+import IconOverview from "./IconOverview.svelte";
 
 export default {
-  title: 'Global | Icons',
-  component: IconOverview,
+  title: "Global",
+  component: IconOverview
 };
 
-export const Overview = () => ({
-  Component: IconOverview,
+export const Icons = () => ({
+  Component: IconOverview
 });

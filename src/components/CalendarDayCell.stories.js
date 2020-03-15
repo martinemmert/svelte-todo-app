@@ -9,20 +9,24 @@ export default {
 
 export const Default = () => ({
   Component: CalendarDayCell,
-  props: {}
+  props: {
+    value: "01"
+  }
 });
 
 export const Today = () => ({
   Component: CalendarDayCell,
   props: {
-    today: true
+    today: true,
+    value: "01"
   }
 });
 
 export const Selected = () => ({
   Component: CalendarDayCell,
   props: {
-    selected: true
+    selected: true,
+    value: "01"
   }
 });
 
@@ -30,14 +34,16 @@ export const TodayAndSelected = () => ({
   Component: CalendarDayCell,
   props: {
     today: true,
-    selected: true
+    selected: true,
+    value: "01"
   }
 });
 
 export const NotCurrentMonth = () => ({
   Component: CalendarDayCell,
   props: {
-    currentMonth: false
+    currentMonth: false,
+    value: "01"
   }
 });
 
@@ -45,7 +51,8 @@ export const NotCurrentMonthAndToday = () => ({
   Component: CalendarDayCell,
   props: {
     currentMonth: false,
-    today: true
+    today: true,
+    value: "01"
   }
 });
 
@@ -53,7 +60,8 @@ export const NotCurrentMonthAndSelected = () => ({
   Component: CalendarDayCell,
   props: {
     currentMonth: false,
-    selected: true
+    selected: true,
+    value: "01"
   }
 });
 
@@ -62,13 +70,15 @@ export const NotCurrentMonthAndTodayAndSelected = () => ({
   props: {
     currentMonth: false,
     selected: true,
-    today: true
+    today: true,
+    value: "01"
   }
 });
 
 export const Disabled = () => ({
   Component: CalendarDayCell,
   props: {
-    disabled: true
+    disabled: true,
+    value: "01"
   }
 });
