@@ -13,6 +13,10 @@
     return value < 10 ? `0${value}` : value;
   }
 
+  export function splitDateString(str) {
+    return str ? str.split("-") : [];
+  }
+
   export function getDaysOfMonth(month, year = THIS_YEAR) {
     switch (month) {
       case 4: // april
@@ -139,15 +143,8 @@
     ? selectedDate.split("-")
     : [today.getFullYear(), today.getMonth() + 1];
 
-  const [minDateYear, minDateMonth, minDateDate] = (minDate
-    ? minDate
-    : ""
-  ).split("-");
-
-  const [maxDateYear, maxDateMonth, maxDateDate] = (maxDate
-    ? maxDate
-    : ""
-  ).split("-");
+  const [minDateYear, minDateMonth, minDateDate] = splitDateString(minDate);
+  const [maxDateYear, maxDateMonth, maxDateDate] = splitDateString(maxDate);
 
   const minDateTime = minDate
     ? wd.setFullYear(minDateYear, minDateMonth, minDateDate)
@@ -177,7 +174,7 @@
 
   value.subscribe(value => {
     if (value) {
-      let [year, month] = value.split("-");
+      let [year, month] = splitDateString(value);
       year = parseFloat(year);
       month = parseFloat(month);
       if (currentMonth !== month || currentYear !== year) {
