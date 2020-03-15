@@ -28,6 +28,7 @@ function add(text) {
 
 function remove(id) {
   todos.update(current => {
+    // eslint-disable-next-line no-unused-vars
     const { [id]: unused, ...rest } = current;
     return rest;
   });
