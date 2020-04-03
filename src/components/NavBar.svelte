@@ -19,7 +19,7 @@
       class="text-gray-200 transition-opacity duration-150 ease-out opacity-50 hover:opacity-100"
       on:click="{() => dispatch('action', { action: 'power' })}"
     >
-      <TablerIcon iconName="power" />
+      <TablerIcon iconName="power" class="w-8 h-8" />
     </button>
   </nav>
 </header>

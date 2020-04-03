@@ -25,14 +25,14 @@
   <ul class="flex flex-row items-center mt-2">
     {#if editable}
       <li use:actionable="{'confirm'}" on:action class="block ml-2 text-teal-500">
-        <TablerIcon iconName="circle-check" />
+        <TablerIcon iconName="circle-check" class="w-8 h-8" />
       </li>
       <li use:actionable="{'cancel'}" on:action class="block ml-2 text-gray-500">
-        <TablerIcon iconName="circle-x" />
+        <TablerIcon iconName="circle-x" class="w-8 h-8" />
       </li>
     {:else}
       <li use:actionable="{'delete'}" on:action class="block ml-2 text-gray-300">
-        <TablerIcon iconName="trash" />
+        <TablerIcon iconName="trash" class="w-8 h-8" />
       </li>
     {/if}
   </ul>

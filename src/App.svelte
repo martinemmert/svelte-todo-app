@@ -47,7 +47,7 @@
 
 <main>
   <NavBar />
-  <div class="max-w-3xl mx-auto mt-12">
+  <div class="max-w-3xl px-8 mx-auto mt-12">
     <TaskList {tasks} on:action="{event => handleAction(event.detail)}" />
   </div>
   <hr class="mt-4" />

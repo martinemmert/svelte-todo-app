@@ -3,6 +3,6 @@
   export let iconName;
 </script>
 
-<svg width="24" height="24" class="{$$props.class}">
+<svg class="{$$props.class}">
   <use xlink:href="{`${src}#tabler-${iconName}`}"></use>
 </svg>
