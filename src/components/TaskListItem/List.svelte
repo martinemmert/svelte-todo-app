@@ -45,11 +45,11 @@
   }
 </style>
 
-<h1 class="font-serif text-2xl font-semibold leading-none text-gray-800 mb-14">Inbox</h1>
+<h1 class="mb-6 font-serif text-lg font-semibold leading-none text-gray-800 md:text-2xl md:mb-14">Inbox</h1>
 {#if tasks}
   <ul class="max-w-3xl mx-auto">
     {#each tasks as task (task.id)}
-      <li class="mt-2 first:mt-0">
+      <li class="mt-4 md:mt-2 first:mt-0">
         <Task
           title={task.title}
           state={task.state}
