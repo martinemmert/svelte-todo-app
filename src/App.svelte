@@ -5,7 +5,14 @@
   import TodoList from "./TodoList.svelte";
   import AddTodoForm from "./AddTodoForm.svelte";
 
+  import NavBar from "./components/NavBar.svelte";
+  import TaskList from "./components/TaskListItem/List.svelte";
+
   let orderFunction = todoUtils.orderAscendingByCreationDate;
+
+  $: tasks = Array.from(Object.values($todos), task => {
+    return { ...task, title: task.text, state: task.completed ? "task-completed" : "idle" };
+  });
 
   sortOrder.subscribe(val => {
     switch (val) {
@@ -23,10 +30,28 @@
         break;
     }
   });
+
+  function handleAction({ action, id }) {
+    console.log(action, id);
+    switch (action) {
+      case "toggle":
+        todos.toggle(id);
+        tasks = tasks;
+        break;
+      case "delete":
+        if (confirm("Delete Item?")) todos.remove(id);
+        break;
+    }
+  }
 </script>
 
 <main>
-  <h1>My ToDo's</h1>
+  <NavBar />
+  <div class="max-w-3xl mx-auto mt-12">
+    <TaskList {tasks} on:action="{event => handleAction(event.detail)}" />
+  </div>
+  <hr class="mt-4" />
+  old stuff
   <AddTodoForm />
   <div>
     <label>
@@ -52,17 +77,4 @@
       </label>
     </fieldset>
   </div>
-  <TodoList
-    todos="{$todos}"
-    filter="{items => !items.completed}"
-    compareFunction="{orderFunction}"
-  />
-  {#if $displayCompletedItems}
-    <h3>Completed Items</h3>
-    <TodoList
-      todos="{$todos}"
-      filter="{items => items.completed}"
-      compareFunction="{todoUtils.orderDescendingByCompletionDate}"
-    />
-  {/if}
 </main>
