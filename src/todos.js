@@ -14,9 +14,10 @@ const todos = writable(initialData);
 let nextId = data ? Object.keys(initialData).pop() : 0;
 
 function add(text) {
+  nextId = nextId + 1;
   todos.update(current => ({
     ...current,
-    [++nextId]: {
+    [nextId]: {
       id: nextId,
       text,
       createdOn: new Date().toISOString(),
