@@ -9,8 +9,8 @@ function actionable(node, action) {
     node.dispatchEvent(new CustomEvent("action", { detail: action }));
   }
 
-  node.setAttribute("role", "button");
-  node.setAttribute("tabindex", "0");
+  // node.setAttribute("role", "button");
+  // node.setAttribute("tabindex", "0");
   node.addEventListener("keypress", handleKeyPress);
   node.addEventListener("click", handleClick);
 

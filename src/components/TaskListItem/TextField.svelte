@@ -25,7 +25,6 @@
     !editable && "border-transparent",
     editable && "border-gray-400",
     "focus:outline-none",
-    "focus:border-blue-400",
     "rounded",
     // transition
     "transition",
