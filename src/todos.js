@@ -1,4 +1,5 @@
 import { writable } from "svelte/store";
+import { v4 as uuid } from "uuid";
 
 export const PRIORITY = {
   PRIMARY: 4,
@@ -11,14 +12,13 @@ const data = localStorage.getItem("todos");
 const initialData = data ? JSON.parse(data) : {};
 const todos = writable(initialData);
 
-let nextId = data ? Object.keys(initialData).pop() : 0;
-
 function add(text) {
-  nextId = nextId + 1;
+  const id = uuid();
+
   todos.update(current => ({
     ...current,
-    [nextId]: {
-      id: nextId,
+    [id]: {
+      id,
       text,
       createdOn: new Date().toISOString(),
       completed: false,
