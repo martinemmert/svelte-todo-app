@@ -34,28 +34,31 @@
   const identityObject = {};
 
   let selectedTask = undefined;
+  let isAddModeEnabled = false;
 
   function handleAction(action) {
     const { type, payload = identityObject } = action;
     const { id, title } = payload;
     console.log({ type, ...payload });
     switch (type) {
-      case "toggle":
-        todos.toggle(id);
+      case "add":
+        isAddModeEnabled = true;
         break;
+      case "toggle":
+        return todos.toggle(id);
       case "edit":
         selectedTask = id;
         break;
       case "change":
-        todos.setText(id, title);
         selectedTask = undefined;
-        break;
+        isAddModeEnabled = false;
+        return id === "__NEW_TASK__" ? todos.add(title) : todos.setText(id, title);
       case "cancel":
         selectedTask = undefined;
+        isAddModeEnabled = false;
         break;
       case "delete":
-        if (confirm("Delete Item?")) todos.remove(id);
-        break;
+        return confirm("Delete Item?") && todos.remove(id);
     }
   }
 </script>
@@ -63,7 +66,12 @@
 <main>
   <NavBar />
   <div class="max-w-3xl px-8 mx-auto mt-6 md:mt-12">
-    <TaskList {tasks} {selectedTask} on:action="{event => handleAction(event.detail)}" />
+    <TaskList
+      {tasks}
+      {selectedTask}
+      {isAddModeEnabled}
+      on:action="{event => handleAction(event.detail)}"
+    />
   </div>
   <hr class="mt-4" />
   old stuff

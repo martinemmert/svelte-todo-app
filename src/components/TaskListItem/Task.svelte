@@ -1,6 +1,6 @@
 <script context="module">
   const TF_CLASS_NAMES_DEFAULT =
-    "px-4 py-2 w-full font-serif font-book text-base leading-normal border rounded focus:outline-none transition transition-colors duration-150 ease-out";
+    "block px-4 py-2 w-full font-serif font-book text-base leading-normal border rounded focus:outline-none transition transition-colors duration-150 ease-out";
   const TF_CLASS_NAMES_IDLE = `${TF_CLASS_NAMES_DEFAULT} text-gray-800 cursor-text border-transparent`;
   const TF_CLASS_NAMES_EDITABLE = `${TF_CLASS_NAMES_DEFAULT} text-gray-800 cursor-text bg-gray-100 border-gray-400`;
   const TF_CLASS_NAMES_COMPLETED = `${TF_CLASS_NAMES_DEFAULT} text-gray-500 cursor-default border-transparent line-through`;
@@ -26,23 +26,51 @@
   let textField;
   let options;
 
+  $: textFieldClassName = isEditModeEnabled ? TF_CLASS_NAMES_EDITABLE : TF_CLASS_NAMES_IDLE;
+
   function actionHandler(event) {
     const type = getActionTypeFromEvent(event);
     if (isTaskCompleted) return handleAction(event);
     switch (type) {
       case "cancel":
-      case "clickoutside":
         $value = title;
         return handleAction("cancel");
       case "confirm":
-        return $value !== title && handleAction("change", { title: $value });
+        return (
+          ($value === title && handleAction("cancel")) ||
+          ($value !== title && handleAction("change", { title: $value }))
+        );
       default:
         return handleAction(event);
     }
   }
 
+  function onKeyDown(event) {
+    const { key } = event;
+    if (!isEditModeEnabled) {
+      switch (key) {
+        case "Enter":
+        case "Space":
+        case " ":
+          actionHandler("edit");
+          break;
+      }
+    } else {
+      switch (key) {
+        case "Enter":
+          actionHandler("confirm");
+          break;
+        case "Escape":
+          actionHandler("cancel");
+          break;
+      }
+    }
+  }
+
   afterUpdate(() => {
-    if (isEditModeEnabled && document.activeElement !== textField) textField.focus();
+    if (textField && isEditModeEnabled) {
+      if (document.activeElement !== textField) textField.focus();
+    }
   });
 </script>
 
@@ -78,18 +106,17 @@
   </svg>
   <!-- begin: text field -->
   {#if !isTaskCompleted}
-    <p
+    <input
+      type="text"
       bind:this="{textField}"
-      contenteditable="{isEditModeEnabled}"
+      readonly="{!isEditModeEnabled}"
       use:clickoutside="{{ enabled: isEditModeEnabled, exclude: [options] }}"
-      on:clickoutside="{() => actionHandler('clickoutside')}"
-      use:actionable="{{ type: 'edit', enabled: !isEditModeEnabled }}"
-      on:action="{actionHandler}"
-      on:input="{event => value.set(event.target.textContent)}"
-      class="{isEditModeEnabled ? TF_CLASS_NAMES_EDITABLE : TF_CLASS_NAMES_IDLE}"
-    >
-      {$value}
-    </p>
+      on:clickoutside="{() => handleAction('cancel')}"
+      on:click="{() => !isEditModeEnabled && handleAction('edit')}"
+      on:keydown="{onKeyDown}"
+      class="{textFieldClassName}"
+      bind:value="{$value}"
+    />
   {:else}
     <p class="{TF_CLASS_NAMES_COMPLETED}">{$value}</p>
   {/if}
