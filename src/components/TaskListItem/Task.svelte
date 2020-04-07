@@ -111,7 +111,7 @@
       bind:this="{textField}"
       readonly="{!isEditModeEnabled}"
       use:clickoutside="{{ enabled: isEditModeEnabled, exclude: [options] }}"
-      on:clickoutside="{() => handleAction('cancel')}"
+      on:clickoutside="{() => actionHandler('cancel')}"
       on:click="{() => !isEditModeEnabled && handleAction('edit')}"
       on:keydown="{onKeyDown}"
       class="{textFieldClassName}"
