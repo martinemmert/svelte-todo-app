@@ -2,8 +2,6 @@
   import todos from "./todos.js";
   import * as todoUtils from "./todo-utilities.js";
   import { sortOrder, displayCompletedItems } from "./filterOptions.js";
-  import TodoList from "./TodoList.svelte";
-  import AddTodoForm from "./AddTodoForm.svelte";
 
   import NavBar from "./components/NavBar.svelte";
   import TaskList from "./components/TaskListItem/List.svelte";
