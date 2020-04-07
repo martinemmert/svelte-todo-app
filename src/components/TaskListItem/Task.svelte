@@ -1,37 +1,121 @@
 <script context="module">
-  export const STATE_IDLE = "idle";
-  export const STATE_EDIT_MODE = "edit-mode";
-  export const STATE_TASK_COMPLETED = "task-completed";
+  const TF_CLASS_NAMES_DEFAULT =
+    "px-4 py-2 w-full font-serif font-book text-base leading-normal border rounded focus:outline-none transition transition-colors duration-150 ease-out";
+  const TF_CLASS_NAMES_IDLE = `${TF_CLASS_NAMES_DEFAULT} text-gray-800 cursor-text border-transparent`;
+  const TF_CLASS_NAMES_EDITABLE = `${TF_CLASS_NAMES_DEFAULT} text-gray-800 cursor-text bg-gray-100 border-gray-400`;
+  const TF_CLASS_NAMES_COMPLETED = `${TF_CLASS_NAMES_DEFAULT} text-gray-500 cursor-default border-transparent line-through`;
 </script>
 
 <script>
-  import { createEventDispatcher } from "svelte";
+  import { createEventDispatcher, afterUpdate } from "svelte";
+  import { writable } from "svelte/store";
+
+  import createHandleAction, { getActionTypeFromEvent } from "./createHandleAction";
   import actionable from "./actionable";
-  import Checkbox from "./Checkbox.svelte";
-  import TextField from "./TextField.svelte";
+  import clickoutside from "./clickoutside";
   import TablerIcon from "../TablerIcon.svelte";
 
   export let title = "";
-  export let state = "idle";
+  export let isTaskCompleted = false;
+  export let isEditModeEnabled = false;
 
-  $: value = title;
-  $: completed = state === STATE_TASK_COMPLETED;
-  $: editable = state === STATE_EDIT_MODE;
+  const dispatch = createEventDispatcher();
+  const handleAction = createHandleAction(dispatch);
+  const value = writable(title);
+
+  let textField;
+  let options;
+
+  function actionHandler(event) {
+    const type = getActionTypeFromEvent(event);
+    if (isTaskCompleted) return handleAction(event);
+    switch (type) {
+      case "cancel":
+      case "clickoutside":
+        $value = title;
+        return handleAction("cancel");
+      case "confirm":
+        return $value !== title && handleAction("change", { title: $value });
+      default:
+        return handleAction(event);
+    }
+  }
+
+  afterUpdate(() => {
+    if (isEditModeEnabled && document.activeElement !== textField) textField.focus();
+  });
 </script>
 
 <div class="flex flex-row items-start">
-  <Checkbox checked="{completed}" on:action />
-  <TextField {editable} {completed} {value} on:action />
-  <ul class="flex flex-row items-center mt-2">
-    {#if editable}
-      <li use:actionable="{'confirm'}" on:action class="block ml-2 text-teal-500">
+  <!-- begin: checkbox -->
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    class="flex-none w-8 h-8 mt-2 mr-2 group focus:outline-none"
+    viewBox="0 0 24 24"
+    stroke-width="2"
+    stroke="currentColor"
+    fill="none"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    use:actionable="{{ type: 'toggle' }}"
+    on:action
+  >
+    {#if isTaskCompleted}
+      <rect
+        fill="currentColor"
+        class="text-gray-200"
+        stroke=""
+        x="4"
+        y="4"
+        width="16"
+        height="16"
+        rx="2"
+      ></rect>
+      <path class="text-gray-600" d="M9 12l2 2l4 -4"></path>
+    {:else}
+      <rect x="4" y="4" class="text-gray-400" width="16" height="16" rx="2"></rect>
+    {/if}
+  </svg>
+  <!-- begin: text field -->
+  {#if !isTaskCompleted}
+    <p
+      bind:this="{textField}"
+      contenteditable="{isEditModeEnabled}"
+      use:clickoutside="{{ enabled: isEditModeEnabled, exclude: [options] }}"
+      on:clickoutside="{() => actionHandler('clickoutside')}"
+      use:actionable="{{ type: 'edit', enabled: !isEditModeEnabled }}"
+      on:action="{actionHandler}"
+      on:input="{event => value.set(event.target.textContent)}"
+      class="{isEditModeEnabled ? TF_CLASS_NAMES_EDITABLE : TF_CLASS_NAMES_IDLE}"
+    >
+      {$value}
+    </p>
+  {:else}
+    <p class="{TF_CLASS_NAMES_COMPLETED}">{$value}</p>
+  {/if}
+  <!-- begin: options -->
+  <ul bind:this="{options}" class="flex flex-row items-center mt-2">
+    {#if isEditModeEnabled}
+      <li
+        use:actionable="{{ type: 'confirm' }}"
+        on:action="{actionHandler}"
+        class="block ml-2 text-teal-500"
+      >
         <TablerIcon iconName="circle-check" class="w-8 h-8" />
       </li>
-      <li use:actionable="{'cancel'}" on:action class="block ml-2 text-gray-500">
+      <li
+        use:actionable="{{ type: 'cancel' }}"
+        on:action="{actionHandler}"
+        class="block ml-2 text-gray-500"
+      >
         <TablerIcon iconName="circle-x" class="w-8 h-8" />
       </li>
     {:else}
-      <li use:actionable="{'delete'}" on:action class="block ml-2 text-gray-300">
+      <li
+        use:actionable="{{ type: 'delete' }}"
+        on:action="{actionHandler}"
+        class="block ml-2 text-gray-300"
+      >
         <TablerIcon iconName="trash" class="w-8 h-8" />
       </li>
     {/if}

@@ -48,6 +48,16 @@ function toggle(id) {
   });
 }
 
+function setText(id, text) {
+  todos.update(current => {
+    if (current[id]) {
+      const updatedItem = { ...current[id], text };
+      return { ...current, [id]: updatedItem };
+    }
+    return current;
+  });
+}
+
 function setDueDate(id, dueDate) {
   todos.update(current => {
     if (current[id]) {
@@ -81,6 +91,7 @@ export default {
   add,
   remove,
   toggle,
+  setText,
   setDueDate,
   setPriority,
 };

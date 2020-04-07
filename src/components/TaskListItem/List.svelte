@@ -1,11 +1,15 @@
 <script>
   import { createEventDispatcher } from "svelte";
+
+  import createHandleAction from "./createHandleAction";
   import Task from "./Task.svelte";
   import TablerIcon from "../TablerIcon.svelte";
 
   export let tasks;
+  export let selectedTask = undefined;
 
   const dispatch = createEventDispatcher();
+  const handleAction = createHandleAction(dispatch);
 </script>
 
 <style>
@@ -45,15 +49,18 @@
   }
 </style>
 
-<h1 class="mb-6 font-serif text-lg font-semibold leading-none text-gray-800 md:text-2xl md:mb-14">Inbox</h1>
+<h1 class="mb-6 font-serif text-lg font-semibold leading-none text-gray-800 md:text-2xl md:mb-14">
+  Inbox
+</h1>
 {#if tasks}
   <ul>
     {#each tasks as task (task.id)}
       <li class="mt-4 md:mt-2 first:mt-0">
         <Task
-          title={task.title}
-          state={task.state}
-          on:action="{event => dispatch('action', { id: task.id, action: event.detail })}"
+          title="{task.title}"
+          isTaskCompleted="{task.completed}"
+          isEditModeEnabled="{task.id === selectedTask}"
+          on:action="{event => handleAction(event, { id: task.id })}"
         />
       </li>
     {/each}
@@ -68,10 +75,7 @@
     <h2 class="text-2xl font-bold text-teal-400 float-text font-handwritten">fini ...</h2>
   </div>
 {/if}
-<button
-  class="flex items-center mt-2 text-gray-600 ml-14"
-  on:click="{() => dispatch('action', { action: 'add' })}"
->
+<button class="flex items-center mt-2 text-gray-600 ml-14" on:click="{() => handleAction('add')}">
   <TablerIcon iconName="circle-plus" class="w-6 h-6" />
   <span class="relative ml-2 font-sans leading-none uppercase text-small">Add new task</span>
 </button>

@@ -31,12 +31,27 @@
     }
   });
 
-  function handleAction({ action, id }) {
-    console.log(action, id);
-    switch (action) {
+  const identityObject = {};
+
+  let selectedTask = undefined;
+
+  function handleAction(action) {
+    const { type, payload = identityObject } = action;
+    const { id, title } = payload;
+    console.log({ type, ...payload });
+    switch (type) {
       case "toggle":
         todos.toggle(id);
-        tasks = tasks;
+        break;
+      case "edit":
+        selectedTask = id;
+        break;
+      case "change":
+        todos.setText(id, title);
+        selectedTask = undefined;
+        break;
+      case "cancel":
+        selectedTask = undefined;
         break;
       case "delete":
         if (confirm("Delete Item?")) todos.remove(id);
@@ -48,7 +63,7 @@
 <main>
   <NavBar />
   <div class="max-w-3xl px-8 mx-auto mt-6 md:mt-12">
-    <TaskList {tasks} on:action="{event => handleAction(event.detail)}" />
+    <TaskList {tasks} {selectedTask} on:action="{event => handleAction(event.detail)}" />
   </div>
   <hr class="mt-4" />
   old stuff
