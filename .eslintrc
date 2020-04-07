@@ -1,0 +1,36 @@
+{
+  "env": {
+    "browser": true,
+    "es6": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 2019,
+    "sourceType": "module"
+  },
+  "extends": ["eslint:recommended", "plugin:prettier/recommended"],
+  "overrides": [
+    {
+      "files": ["**/*.svelte"],
+      "processor": "svelte3/svelte3",
+      "plugins": ["svelte3"]
+    },
+    {
+      "files": ["rollup.config.js", "tailwind.config.js", "postcss.config.js", ".storybook/*.js"],
+      "env": {
+        "browser": false,
+        "node": true
+      }
+    },
+    {
+      "files": ["**/*.test.js", "**/*.spec.js"],
+      "plugins": ["jest", "jest-formatting"],
+      "extends": ["plugin:jest/recommended", "plugin:jest-formatting/recommended"],
+      "env": {
+        "jest/globals": true
+      }
+    }
+  ],
+  "rules": {
+    "prettier/prettier": "error"
+  }
+}

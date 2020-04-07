@@ -2,10 +2,15 @@
   import todos from "./todos.js";
   import * as todoUtils from "./todo-utilities.js";
   import { sortOrder, displayCompletedItems } from "./filterOptions.js";
-  import TodoList from "./TodoList.svelte";
-  import AddTodoForm from "./AddTodoForm.svelte";
+
+  import NavBar from "./components/NavBar.svelte";
+  import TaskList from "./components/TaskListItem/List.svelte";
 
   let orderFunction = todoUtils.orderAscendingByCreationDate;
+
+  $: tasks = Array.from(Object.values($todos), task => {
+    return { ...task, title: task.text, state: task.completed ? "task-completed" : "idle" };
+  });
 
   sortOrder.subscribe(val => {
     switch (val) {
@@ -23,44 +28,71 @@
         break;
     }
   });
+
+  const identityObject = {};
+
+  let selectedTask = undefined;
+  let isAddModeEnabled = false;
+
+  function handleAction(action) {
+    const { type, payload = identityObject } = action;
+    const { id, title } = payload;
+    console.log({ type, ...payload });
+    switch (type) {
+      case "add":
+        isAddModeEnabled = true;
+        break;
+      case "toggle":
+        return todos.toggle(id);
+      case "edit":
+        selectedTask = id;
+        break;
+      case "change":
+        selectedTask = undefined;
+        isAddModeEnabled = false;
+        return id === "__NEW_TASK__" ? todos.add(title) : todos.setText(id, title);
+      case "cancel":
+        selectedTask = undefined;
+        isAddModeEnabled = false;
+        break;
+      case "delete":
+        return confirm("Delete Item?") && todos.remove(id);
+    }
+  }
 </script>
 
 <main>
-  <h1>My ToDo's</h1>
-  <AddTodoForm />
-  <div>
+  <NavBar />
+  <div class="max-w-3xl px-8 mx-auto mt-6 md:my-12">
+    <TaskList
+      {tasks}
+      {selectedTask}
+      {isAddModeEnabled}
+      on:action="{event => handleAction(event.detail)}"
+    />
+  </div>
+  <!-- <div>
     <label>
       <span>Show completed Items:</span>
-      <input type="checkbox" bind:checked={$displayCompletedItems} />
+      <input type="checkbox" bind:checked="{$displayCompletedItems}" />
     </label>
     <fieldset>
       <label>
-        <input type="radio" bind:group={$sortOrder} value="creationDate" />
+        <input type="radio" bind:group="{$sortOrder}" value="creationDate" />
         Creation Date 🔼
       </label>
       <label>
-        <input type="radio" bind:group={$sortOrder} value="dueDateAscending" />
+        <input type="radio" bind:group="{$sortOrder}" value="dueDateAscending" />
         Due Date 🔼
       </label>
       <label>
-        <input type="radio" bind:group={$sortOrder} value="dueDateDescending" />
+        <input type="radio" bind:group="{$sortOrder}" value="dueDateDescending" />
         Due Date 🔽
       </label>
       <label>
-        <input type="radio" bind:group={$sortOrder} value="priorityDescending" />
+        <input type="radio" bind:group="{$sortOrder}" value="priorityDescending" />
         Priority 🔽
       </label>
     </fieldset>
-  </div>
-  <TodoList
-    todos={$todos}
-    filter={items => !items.completed}
-    compareFunction={orderFunction} />
-  {#if $displayCompletedItems}
-    <h3>Completed Items</h3>
-    <TodoList
-      todos={$todos}
-      filter={items => items.completed}
-      compareFunction={todoUtils.orderDescendingByCompletionDate} />
-  {/if}
+  </div> -->
 </main>
