@@ -65,7 +65,7 @@
 
 <main>
   <NavBar />
-  <div class="max-w-3xl px-8 mx-auto mt-6 md:mt-12">
+  <div class="max-w-3xl px-8 mx-auto mt-6 md:my-12">
     <TaskList
       {tasks}
       {selectedTask}
@@ -73,10 +73,7 @@
       on:action="{event => handleAction(event.detail)}"
     />
   </div>
-  <hr class="mt-4" />
-  old stuff
-  <AddTodoForm />
-  <div>
+  <!-- <div>
     <label>
       <span>Show completed Items:</span>
       <input type="checkbox" bind:checked="{$displayCompletedItems}" />
@@ -99,5 +96,5 @@
         Priority 🔽
       </label>
     </fieldset>
-  </div>
+  </div> -->
 </main>
