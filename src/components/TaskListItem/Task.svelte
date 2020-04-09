@@ -2,7 +2,7 @@
   const TF_CLASS_NAMES_DEFAULT =
     "block px-4 py-2 w-full font-serif font-book text-base leading-normal border rounded focus:outline-none transition transition-colors duration-150 ease-out";
   const TF_CLASS_NAMES_IDLE = `${TF_CLASS_NAMES_DEFAULT} text-gray-800 cursor-text border-transparent`;
-  const TF_CLASS_NAMES_EDITABLE = `${TF_CLASS_NAMES_DEFAULT} text-gray-800 cursor-text bg-gray-100 border-gray-400`;
+  const TF_CLASS_NAMES_EDITABLE = `${TF_CLASS_NAMES_DEFAULT} appearance-none text-gray-800 cursor-text bg-gray-100 border-gray-400`;
   const TF_CLASS_NAMES_COMPLETED = `${TF_CLASS_NAMES_DEFAULT} text-gray-500 cursor-default border-transparent line-through`;
 </script>
 
@@ -106,17 +106,24 @@
   </svg>
   <!-- begin: text field -->
   {#if !isTaskCompleted}
-    <input
-      type="text"
-      bind:this="{textField}"
-      readonly="{!isEditModeEnabled}"
-      use:clickoutside="{{ enabled: isEditModeEnabled, exclude: [options] }}"
-      on:clickoutside="{() => actionHandler('cancel')}"
-      on:click="{() => !isEditModeEnabled && handleAction('edit')}"
-      on:keydown="{onKeyDown}"
-      class="{textFieldClassName}"
-      bind:value="{$value}"
-    />
+    {#if isEditModeEnabled}
+      <input
+        type="text"
+        bind:this="{textField}"
+        use:clickoutside="{{ enabled: isEditModeEnabled, exclude: [options] }}"
+        on:clickoutside="{() => actionHandler('cancel')}"
+        on:keydown="{onKeyDown}"
+        class="{TF_CLASS_NAMES_EDITABLE}"
+        bind:value="{$value}"
+      />
+    {:else}
+      <p
+        class="{TF_CLASS_NAMES_IDLE}"
+        on:click="{() => !isEditModeEnabled && handleAction('edit')}"
+      >
+        {$value}
+      </p>
+    {/if}
   {:else}
     <p class="{TF_CLASS_NAMES_COMPLETED}">{$value}</p>
   {/if}
