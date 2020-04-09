@@ -50,7 +50,7 @@
   }
 </style>
 
-<h1 class="mb-6 font-serif text-lg font-semibold leading-none text-gray-800 md:text-2xl md:mb-14">
+<h1 class="mb-6 font-serif text-lg font-semibold leading-none text-gray-800 ml-14 md:text-2xl md:mb-14">
   Inbox
 </h1>
 {#if tasks && (tasks.length || isAddModeEnabled)}
@@ -86,7 +86,7 @@
   </div>
 {/if}
 {#if !isAddModeEnabled}
-  <button class="flex items-center mt-2 text-gray-600 ml-14" on:click="{() => handleAction('add')}">
+  <button class="flex items-center mt-6 text-gray-600 ml-14" on:click="{() => handleAction('add')}">
     <TablerIcon iconName="circle-plus" class="w-6 h-6" />
     <span class="relative ml-2 font-sans leading-none uppercase text-small">Add new task</span>
   </button>
