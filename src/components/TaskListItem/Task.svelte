@@ -78,11 +78,8 @@
   <!-- begin: checkbox -->
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    class="flex-none w-8 h-8 mt-2 mr-2 group focus:outline-none"
+    class="flex-none w-8 h-8 mt-2 mr-2 cursor-pointer focus:outline-none"
     viewBox="0 0 24 24"
-    stroke-width="2"
-    stroke="currentColor"
-    fill="none"
     stroke-linecap="round"
     stroke-linejoin="round"
     use:actionable="{{ type: 'toggle' }}"
@@ -90,18 +87,35 @@
   >
     {#if isTaskCompleted}
       <rect
+        stroke-width="2"
         fill="currentColor"
         class="text-gray-200"
-        stroke=""
+        stroke="currentColor"
         x="4"
         y="4"
         width="16"
         height="16"
         rx="2"
       ></rect>
-      <path class="text-gray-600" d="M9 12l2 2l4 -4"></path>
+      <path
+        fill="none"
+        stroke-width="2"
+        stroke="currentColor"
+        class="text-gray-600"
+        d="M9 12l2 2l4 -4"
+      ></path>
     {:else}
-      <rect x="4" y="4" class="text-gray-400" width="16" height="16" rx="2"></rect>
+      <rect
+        fill="none"
+        stroke-width="2"
+        stroke="currentColor"
+        x="4"
+        y="4"
+        class="text-gray-400"
+        width="16"
+        height="16"
+        rx="2"
+      ></rect>
     {/if}
   </svg>
   <!-- begin: text field -->
