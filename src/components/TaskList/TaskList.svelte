@@ -1,9 +1,9 @@
 <script>
   import { createEventDispatcher } from "svelte";
 
-  import createHandleAction from "../../utils/createHandleAction";
+  import createHandleAction from "~utils/createHandleAction";
   import TaskListItem from "./Item";
-  import TablerIcon from "../TablerIcon";
+  import TablerIcon from "~components/TablerIcon";
 
   export let tasks;
   export let selectedTask = undefined;

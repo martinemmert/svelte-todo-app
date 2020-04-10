@@ -1,5 +1,5 @@
 <script context="module">
-  import i18n from "../../i18n";
+  import i18n from "~i18n";
   import classnames from "classnames";
 
   const cnFlex = "flex flex-col items-center justify-center";

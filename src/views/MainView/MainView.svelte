@@ -1,10 +1,10 @@
 <script>
-  import * as todoUtils from "../../utils/todo-utilities.js";
-  import todos from "../../stores/todos.js";
-  import { sortOrder, displayCompletedItems } from "../../stores/filterOptions.js";
+  import * as todoUtils from "~utils/todo-utilities.js";
+  import todos from "~stores/todos.js";
+  import { sortOrder, displayCompletedItems } from "~stores/filterOptions.js";
 
-  import NavBar from "../../components/NavBar";
-  import TaskList from "../../components/TaskList";
+  import NavBar from "~components/NavBar";
+  import TaskList from "~components/TaskList";
 
   let orderFunction = todoUtils.orderAscendingByCreationDate;
 

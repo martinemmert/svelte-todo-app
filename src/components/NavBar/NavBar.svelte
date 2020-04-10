@@ -1,6 +1,6 @@
 <script>
   import { createEventDispatcher } from "svelte";
-  import TablerIcon from "../TablerIcon";
+  import TablerIcon from "~components/TablerIcon";
 
   const dispatch = createEventDispatcher();
 </script>

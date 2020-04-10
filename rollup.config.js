@@ -1,10 +1,12 @@
-import svelte from "rollup-plugin-svelte";
 import resolve from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
+import alias from "@rollup/plugin-alias";
+import svelte from "rollup-plugin-svelte";
 import livereload from "rollup-plugin-livereload";
 import { terser } from "rollup-plugin-terser";
 import postcss from "rollup-plugin-postcss";
 
+const paths = require("./paths");
 const production = !process.env.ROLLUP_WATCH;
 
 export default {
@@ -21,7 +23,7 @@ export default {
       dev: !production,
       // we'll extract any component CSS out into
       // a separate file - better for performance
-      css: css => {
+      css: (css) => {
         css.write("public/build/bundle.css");
       },
       // Emit CSS as "files" for other plugins to process
@@ -38,6 +40,10 @@ export default {
       dedupe: ["svelte"],
     }),
     commonjs(),
+
+    alias({
+      entries: paths,
+    }),
 
     // In dev mode, call `npm run start` once
     // the bundle has been generated

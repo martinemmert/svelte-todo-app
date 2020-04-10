@@ -1,6 +1,6 @@
 <script context="module">
   import invariant from "invariant";
-  import i18n from "../../i18n";
+  import i18n from "~i18n";
   const wd = new Date();
   wd.setHours(0, 0, 0, 0);
   const THIS_YEAR = wd.getFullYear();

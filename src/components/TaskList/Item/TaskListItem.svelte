@@ -10,10 +10,10 @@
   import { createEventDispatcher, afterUpdate } from "svelte";
   import { writable } from "svelte/store";
 
-  import createHandleAction, { getActionTypeFromEvent } from "../../../utils/createHandleAction";
-  import actionable from "../../../actions/actionable";
-  import clickoutside from "../../../actions/clickoutside";
-  import TablerIcon from "../../TablerIcon";
+  import createHandleAction, { getActionTypeFromEvent } from "~utils/createHandleAction";
+  import actionable from "~actions/actionable";
+  import clickoutside from "~actions/clickoutside";
+  import TablerIcon from "~components/TablerIcon";
 
   export let title = "";
   export let isTaskCompleted = false;
