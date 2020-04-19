@@ -1,4 +1,5 @@
 import resolve from "@rollup/plugin-node-resolve";
+import replace from "@rollup/plugin-replace";
 import commonjs from "@rollup/plugin-commonjs";
 import alias from "@rollup/plugin-alias";
 import svelte from "rollup-plugin-svelte";
@@ -39,6 +40,11 @@ export default {
       browser: true,
       dedupe: ["svelte"],
     }),
+
+    replace({
+      "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
+    }),
+
     commonjs(),
 
     alias({
