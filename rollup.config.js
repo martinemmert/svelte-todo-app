@@ -38,11 +38,12 @@ export default {
     // https://github.com/rollup/plugins/tree/master/packages/commonjs
     resolve({
       browser: true,
-      dedupe: ["svelte"],
+      dedupe: ["svelte", "xstate"],
     }),
 
     replace({
-      "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
+      "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV || "development"),
+      "process.env.DEBUG": JSON.stringify(process.env.NODE_ENV !== "production"),
     }),
 
     commonjs(),
@@ -70,6 +71,7 @@ export default {
   ],
   watch: {
     clearScreen: false,
+    include: "src/**",
   },
 };
 

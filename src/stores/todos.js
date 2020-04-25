@@ -15,7 +15,7 @@ const todos = writable(initialData);
 function add(text) {
   const id = uuid();
 
-  todos.update(current => ({
+  todos.update((current) => ({
     ...current,
     [id]: {
       id,
@@ -28,7 +28,7 @@ function add(text) {
 }
 
 function remove(id) {
-  todos.update(current => {
+  todos.update((current) => {
     // eslint-disable-next-line no-unused-vars
     const { [id]: unused, ...rest } = current;
     return rest;
@@ -36,7 +36,7 @@ function remove(id) {
 }
 
 function toggle(id) {
-  todos.update(current => {
+  todos.update((current) => {
     if (current[id]) {
       const updatedItem = {
         ...current[id],
@@ -50,7 +50,7 @@ function toggle(id) {
 }
 
 function setText(id, text) {
-  todos.update(current => {
+  todos.update((current) => {
     if (current[id]) {
       const updatedItem = { ...current[id], text };
       return { ...current, [id]: updatedItem };
@@ -60,7 +60,7 @@ function setText(id, text) {
 }
 
 function setDueDate(id, dueDate) {
-  todos.update(current => {
+  todos.update((current) => {
     if (current[id]) {
       const updatedItem = { ...current[id], dueDate };
       return { ...current, [id]: updatedItem };
@@ -70,7 +70,7 @@ function setDueDate(id, dueDate) {
 }
 
 function setPriority(id, priority) {
-  todos.update(current => {
+  todos.update((current) => {
     if (current[id]) {
       const updatedItem = { ...current[id], priority };
       return { ...current, [id]: updatedItem };
@@ -79,7 +79,7 @@ function setPriority(id, priority) {
   });
 }
 
-todos.subscribe(val => {
+todos.subscribe((val) => {
   if (Object.keys(val).length < 1) {
     localStorage.removeItem("todos");
   } else {

@@ -1,16 +1,19 @@
 <script>
+  import { getContext, setContext } from "svelte";
+  import { interpret } from "xstate";
+  import { derived } from "svelte/store";
   import * as todoUtils from "~utils/todo-utilities.js";
   import todos from "~stores/todos.js";
   import { sortOrder, displayCompletedItems } from "~stores/filterOptions.js";
+  import TablerIcon from "~components/TablerIcon";
 
   import NavBar from "~components/NavBar";
   import TaskList from "~components/TaskList";
 
-  let orderFunction = todoUtils.orderAscendingByCreationDate;
+  import TaskCollectionMachine, { CONSTANTS } from "~fsm/machines/TaskCollection";
+  import useMachine from "~fsm/useMachine";
 
-  $: tasks = Array.from(Object.values($todos), task => {
-    return { ...task, title: task.text, state: task.completed ? "task-completed" : "idle" };
-  });
+  let orderFunction = todoUtils.orderAscendingByCreationDate;
 
   sortOrder.subscribe(val => {
     switch (val) {
@@ -29,47 +32,30 @@
     }
   });
 
-  const identityObject = {};
+  const parentService = getContext("fsm/parentService");
+  const [currentState, send, service] = useMachine(TaskCollectionMachine, {
+    parent: parentService,
+  });
 
-  let selectedTask = undefined;
-  let isAddModeEnabled = false;
+  const tasks = derived(currentState, $currentState => Object.values($currentState.context.tasks));
+  const newTask = derived(currentState, $currentState => Object.values($currentState.context.newTask));
 
-  function handleAction(action) {
-    const { type, payload = identityObject } = action;
-    const { id, title } = payload;
-    console.log({ type, ...payload });
-    switch (type) {
-      case "add":
-        isAddModeEnabled = true;
-        break;
-      case "toggle":
-        return todos.toggle(id);
-      case "edit":
-        selectedTask = id;
-        break;
-      case "change":
-        selectedTask = undefined;
-        isAddModeEnabled = false;
-        return id === "__NEW_TASK__" ? todos.add(title) : todos.setText(id, title);
-      case "cancel":
-        selectedTask = undefined;
-        isAddModeEnabled = false;
-        break;
-      case "delete":
-        return confirm("Delete Item?") && todos.remove(id);
-    }
-  }
+  setContext("fsm/parentService", service);
 </script>
 
 <main>
   <NavBar />
   <div class="max-w-3xl px-8 mx-auto mt-6 md:my-12">
-    <TaskList
-      {tasks}
-      {selectedTask}
-      {isAddModeEnabled}
-      on:action="{event => handleAction(event.detail)}"
-    />
+    <TaskList tasks="{$tasks}" />
+    {#if !$currentState.matches(CONSTANTS.STATE_MATCHER_ADDING_NEW_TASK)}
+      <button
+        class="flex items-center mt-6 text-gray-600 ml-14"
+        on:click="{() => send(CONSTANTS.EVENT_ADD_NEW_TASK)}"
+      >
+        <TablerIcon iconName="circle-plus" class="w-6 h-6" />
+        <span class="relative ml-2 font-sans leading-none uppercase text-small">Add new task</span>
+      </button>
+    {/if}
   </div>
   <!-- <div>
     <label>

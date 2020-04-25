@@ -18,7 +18,7 @@ export const Empty = () => ({
   props: {},
   on: {
     add: action("add"),
-    action: event => action("action")(event.detail),
+    action: (event) => action("action")(event.detail),
   },
 });
 
@@ -29,6 +29,6 @@ export const NotEmpty = () => ({
   },
   on: {
     add: action("add"),
-    action: event => action("action")(event.detail),
+    action: (event) => action("action")(event.detail),
   },
 });

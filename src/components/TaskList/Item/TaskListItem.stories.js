@@ -8,36 +8,36 @@ export default {
   decorators: [withKnobs],
 };
 
-export const Idle = () => ({
+export const Pending = () => ({
   Component: TaskListItem,
   props: {
-    completed: false,
     title: "some value",
-    state: "idle",
+    isCompleted: false,
   },
   on: {
-    action: event => action("action")(event.detail),
+    action: (event) => action("action")(event.detail),
   },
 });
 
-export const Edit = () => ({
+export const Editing = () => ({
   Component: TaskListItem,
   props: {
     title: "some value",
-    state: "edit-mode",
+    isCompleted: false,
+    isEditModeEnabled: true,
   },
   on: {
-    action: event => action("action")(event.detail),
+    action: (event) => action("action")(event.detail),
   },
 });
 
-export const Complete = () => ({
+export const Completed = () => ({
   Component: TaskListItem,
   props: {
     title: "some value",
-    state: "task-completed",
+    isCompleted: true,
   },
   on: {
-    action: event => action("action")(event.detail),
+    action: (event) => action("action")(event.detail),
   },
 });
